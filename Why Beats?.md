@@ -1,4 +1,4 @@
-The Physics of Beats
+#The Physics of Beats
 
 
 At its core, the creation of beats is a result of interference between sound waves. 
