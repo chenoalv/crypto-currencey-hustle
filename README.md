@@ -14,7 +14,7 @@
   Music engineering, also known as audio engineering or sound engineering, is the technical aspect of recording, mixing, and reproducing sound. It bridges the gap between the artistic vision of musicians and the technical requirements of sound production.
 </p>
 
-[Why Beats](Why Beats?.md)
+[Why Beats?](Why Beats?.md)
 
 <h2>Key Aspects of Music Engineering</h2>
 
