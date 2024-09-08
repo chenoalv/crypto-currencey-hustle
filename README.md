@@ -15,6 +15,7 @@
 </p>
 
 [Why Beats?](Why%20Beats%3F.md)
+For an interactive version of this guide with audio examples, [click here](beats_with_audio.html).
 
 <h2>Key Aspects of Music Engineering</h2>
 
