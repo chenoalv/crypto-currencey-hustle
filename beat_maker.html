@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Beat Maker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            color: #333;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 5px;
+            max-width: 400px;
+            margin-bottom: 20px;
+        }
+        .cell {
+            width: 40px;
+            height: 40px;
+            background-color: #ddd;
+            border: 1px solid #999;
+            cursor: pointer;
+        }
+        .active {
+            background-color: #4CAF50;
+        }
+        .playing {
+            opacity: 0.5;
+        }
+        button {
+            font-size: 16px;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simple Beat Maker</h1>
+    <div class="grid" id="beatGrid"></div>
+    <div>
+        <button id="playButton">Play/Stop</button>
+        <button id="clearButton">Clear</button>
+    </div>
+
+    <script>
+        const grid = document.getElementById('beatGrid');
+        const playButton = document.getElementById('playButton');
+        const clearButton = document.getElementById('clearButton');
+        let isPlaying = false;
+        let currentBeat = 0;
+
+        // Web Audio API setup
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function createOscillator(frequency, duration) {
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            osc.frequency.value = frequency;
+            gain.gain.setValueAtTime(0.5, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            osc.start();
+            osc.stop(audioContext.currentTime + duration);
+        }
+
+        // Create grid
+        for (let i = 0; i < 32; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            cell.addEventListener('click', () => cell.classList.toggle('active'));
+            grid.appendChild(cell);
+        }
+
+        // Play/Stop functionality
+        playButton.addEventListener('click', () => {
+            isPlaying = !isPlaying;
+            playButton.textContent = isPlaying ? 'Stop' : 'Play';
+            if (isPlaying) {
+                audioContext.resume().then(() => playBeat());
+            }
+        });
+
+        // Clear grid
+        clearButton.addEventListener('click', () => {
+            const cells = grid.children;
+            for (let cell of cells) {
+                cell.classList.remove('active');
+            }
+        });
+
+        function playBeat() {
+            if (!isPlaying) return;
+            
+            const cells = grid.children;
+            for (let i = 0; i < 8; i++) {
+                const cellIndex = i + currentBeat * 8;
+                cells[cellIndex].classList.toggle('playing', true);
+                if (cells[cellIndex].classList.contains('active')) {
+                    // Play sound for active cells
+                    createOscillator(220 * (i + 1), 0.1); // Different pitch for each column
+                }
+                setTimeout(() => cells[cellIndex].classList.toggle('playing', false), 100);
+            }
+            
+            currentBeat = (currentBeat + 1) % 4;
+            setTimeout(playBeat, 250); // Adjust tempo here (250ms = 120 BPM)
+        }
+    </script>
+</body>
+</html>
