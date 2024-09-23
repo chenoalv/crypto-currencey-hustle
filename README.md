@@ -1,22 +1,24 @@
 <h1 align="center">Engineering Thru Beats: Exploring Music Engineering</h1>
 
 <p align="center">
-  <img src="https://via.placeholder.com/150" alt="Engineering Thru Beats Logo">
+<img src="https://via.placeholder.com/150" alt="Engineering Thru Beats Logo">
 </p>
 
 <p align="center">
-  Welcome to the fascinating world of music engineering, where technology and creativity harmonize to produce the soundtrack of our lives.
+Welcome to the fascinating world of music engineering, where technology and creativity harmonize to produce the soundtrack of our lives.
 </p>
 
 <h2>What is Music Engineering?</h2>
 
 <p>
-  Music engineering, also known as audio engineering or sound engineering, is the technical aspect of recording, mixing, and reproducing sound. It bridges the gap between the artistic vision of musicians and the technical requirements of sound production.
+Music engineering, also known as audio engineering or sound engineering, is the technical aspect of recording, mixing, and reproducing sound.
 </p>
 
 [Why Beats?](Why%20Beats%3F.md)
 
 For an interactive version of this guide with audio examples, [click here](beats_with_audio.html).
+
+Try our interactive Beat Maker! [Create your own rhythms](beat_maker.html)
 
 <h2>Key Aspects of Music Engineering</h2>
 
@@ -31,7 +33,7 @@ For an interactive version of this guide with audio examples, [click here](beats
 <h2>Tools of the Trade</h2>
 
 <p>
-  Music engineers work with a variety of tools, including:
+Music engineers work with a variety of tools, including:
 </p>
 
 <ul>
@@ -46,15 +48,15 @@ For an interactive version of this guide with audio examples, [click here](beats
 <h2>The Impact of Technology</h2>
 
 <p>
-  Advancements in technology have revolutionized music engineering. From analog tape machines to sophisticated digital systems, the field continues to evolve, offering new possibilities for sound creation and manipulation.
+Advancements in technology have revolutionized music engineering. From analog tape machines to sophisticated digital systems, the field continues to evolve, offering new possibilities for sound creation and manipulation.
 </p>
 
 <h2>Join Us on This Journey</h2>
 
 <p>
-  Through this project, we aim to explore the principles of music engineering, experiment with sound, and create innovative audio experiences. Whether you're a seasoned pro or just starting out, there's always something new to discover in the world of music engineering.
+Through this project, we aim to explore the principles of music engineering, experiment with sound, and create innovative audio experiences. Whether you're a seasoned pro or just starting out, there's always something new to discover in the world of music engineering.
 </p>
 
 <p align="center">
-  <i>Let's engineer the future of sound together!</i>
+<i>Let's engineer the future of sound together!</i>
 </p>
