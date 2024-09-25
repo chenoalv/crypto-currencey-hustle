@@ -1,113 +1,82 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Beat Maker</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-        }
-        .container {
-            text-align: center;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(8, 1fr);
-            gap: 5px;
-            margin-bottom: 20px;
-        }
-        .cell {
-            width: 40px;
-            height: 40px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .cell.active {
-            opacity: 1;
-        }
-        .row-kick .cell { background-color: #ff9999; }
-        .row-snare .cell { background-color: #99ff99; }
-        .row-hihat .cell { background-color: #9999ff; }
-        .row-tom .cell { background-color: #ffff99; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Enhanced Beat Maker</h1>
-        <div class="grid" id="beat-grid"></div>
-        <button id="play-button">Play/Pause</button>
-        <button id="clear-button">Clear All</button>
-    </div>
+<script>
+    const instruments = ['kick', 'snare', 'hihat', 'tom'];
+    const grid = document.getElementById('beat-grid');
+    const playButton = document.getElementById('play-button');
+    const clearButton = document.getElementById('clear-button');
+    let isPlaying = false;
+    let currentColumn = 0;
 
-    <script>
-        const instruments = ['kick', 'snare', 'hihat', 'tom'];
-        const grid = document.getElementById('beat-grid');
-        const playButton = document.getElementById('play-button');
-        const clearButton = document.getElementById('clear-button');
-        let isPlaying = false;
-        let currentColumn = 0;
+    // Audio context
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const sounds = {};
 
-        // Create grid
-        instruments.forEach(instrument => {
-            const row = document.createElement('div');
-            row.className = `row-${instrument}`;
-            for (let i = 0; i < 8; i++) {
-                const cell = document.createElement('div');
-                cell.className = 'cell';
-                cell.addEventListener('click', () => toggleCell(cell));
-                row.appendChild(cell);
-            }
-            grid.appendChild(row);
-        });
-
-        function toggleCell(cell) {
-            cell.classList.toggle('active');
-        }
-
-        function clearGrid() {
-            document.querySelectorAll('.cell').forEach(cell => cell.classList.remove('active'));
-        }
-
-        function playBeat() {
-            const columns = grid.querySelectorAll(`.cell:nth-child(${currentColumn + 1})`);
-            columns.forEach((cell, index) => {
-                if (cell.classList.contains('active')) {
-                    playSound(instruments[index]);
-                }
+    // Load audio samples
+    instruments.forEach(instrument => {
+        fetch(`audio/${instrument}.wav`)
+            .then(response => response.arrayBuffer())
+            .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+            .then(audioBuffer => {
+                sounds[instrument] = audioBuffer;
             });
-            currentColumn = (currentColumn + 1) % 8;
-        }
+    });
 
-        function playSound(instrument) {
-            // For now, we'll just log the instrument. We'll replace this with actual sounds later.
-            console.log(`Playing ${instrument}`);
+    // Create grid (same as before)
+    instruments.forEach(instrument => {
+        const row = document.createElement('div');
+        row.className = `row-${instrument}`;
+        for (let i = 0; i < 8; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            cell.addEventListener('click', () => toggleCell(cell));
+            row.appendChild(cell);
         }
+        grid.appendChild(row);
+    });
 
-        playButton.addEventListener('click', () => {
-            isPlaying = !isPlaying;
-            if (isPlaying) {
+    function toggleCell(cell) {
+        cell.classList.toggle('active');
+    }
+
+    function clearGrid() {
+        document.querySelectorAll('.cell').forEach(cell => cell.classList.remove('active'));
+    }
+
+    function playBeat() {
+        const columns = grid.querySelectorAll(`.cell:nth-child(${currentColumn + 1})`);
+        columns.forEach((cell, index) => {
+            if (cell.classList.contains('active')) {
+                playSound(instruments[index]);
+            }
+        });
+        currentColumn = (currentColumn + 1) % 8;
+    }
+
+    function playSound(instrument) {
+        if (sounds[instrument]) {
+            const source = audioContext.createBufferSource();
+            source.buffer = sounds[instrument];
+            source.connect(audioContext.destination);
+            source.start();
+        }
+    }
+
+    playButton.addEventListener('click', () => {
+        isPlaying = !isPlaying;
+        if (isPlaying) {
+            audioContext.resume().then(() => {
                 playButton.textContent = 'Pause';
                 playBeatSequence();
-            } else {
-                playButton.textContent = 'Play';
-            }
-        });
-
-        clearButton.addEventListener('click', clearGrid);
-
-        function playBeatSequence() {
-            if (!isPlaying) return;
-            playBeat();
-            setTimeout(playBeatSequence, 250); // Adjust this value to change tempo
+            });
+        } else {
+            playButton.textContent = 'Play';
         }
-    </script>
-</body>
-</html>
+    });
+
+    clearButton.addEventListener('click', clearGrid);
+
+    function playBeatSequence() {
+        if (!isPlaying) return;
+        playBeat();
+        setTimeout(playBeatSequence, 250); // Adjust this value to change tempo
+    }
+</script>
