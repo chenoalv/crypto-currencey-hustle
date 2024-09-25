@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #1e1e1e;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: #ffffff;
             display: flex;
             justify-content: center;
@@ -21,6 +21,15 @@
             text-align: center;
             max-width: 800px;
             width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin-bottom: 30px;
+            color: #4CAF50;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
         .grid {
             display: grid;
@@ -37,22 +46,31 @@
             width: 60px;
             text-align: right;
             margin-right: 10px;
+            font-weight: bold;
         }
         .cell {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
+            opacity: 0.7;
         }
         .cell.active {
             transform: scale(0.95);
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            opacity: 1;
         }
-        .row-kick .cell { background-color: #ff9999; }
-        .row-snare .cell { background-color: #99ff99; }
-        .row-hihat .cell { background-color: #9999ff; }
-        .row-tom .cell { background-color: #ffff99; }
+        .cell.playing {
+            animation: pulse 0.5s infinite alternate;
+        }
+        .row-kick .cell { background-color: #ff6b6b; }
+        .row-snare .cell { background-color: #4ecdc4; }
+        .row-hihat .cell { background-color: #45b7d1; }
+        .row-tom .cell { background-color: #f7b731; }
+        .column-playing {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
         button {
             background-color: #4CAF50;
             border: none;
@@ -112,6 +130,30 @@
             border-radius: 50%;
             background: #4CAF50;
             cursor: pointer;
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1.1);
+            }
+        }
+        @media (max-width: 600px) {
+            .grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .cell {
+                width: 40px;
+                height: 40px;
+            }
+            .label {
+                width: 40px;
+                font-size: 0.8em;
+            }
+            input[type="range"] {
+                width: 150px;
+            }
         }
     </style>
 </head>
@@ -231,9 +273,15 @@
         function playBeat() {
             instruments.forEach((instrument, index) => {
                 const row = grid.querySelector(`.row-${instrument}`);
-                const cell = row.children[currentColumn];
-                if (cell.classList.contains('active')) {
-                    playSound(instrument);
+                for (let i = 0; i < 8; i++) {
+                    const cell = row.children[i];
+                    cell.classList.toggle('column-playing', i === currentColumn);
+                    if (i === currentColumn && cell.classList.contains('active')) {
+                        cell.classList.add('playing');
+                        playSound(instrument);
+                    } else {
+                        cell.classList.remove('playing');
+                    }
                 }
             });
             currentColumn = (currentColumn + 1) % 8;
