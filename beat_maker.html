@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enhanced Beat Maker</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Permanent+Marker&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -30,10 +30,12 @@
         h1 {
             margin-bottom: 30px;
             color: #4CAF50;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            font-weight: 700;
-            font-size: 2.5em;
-            letter-spacing: 1px;
+            text-shadow: 0 0 10px #4CAF50, 0 0 20px #4CAF50, 0 0 30px #4CAF50, 0 0 40px #4CAF50;
+            font-family: 'Permanent Marker', cursive;
+            font-weight: 400;
+            font-size: 3em;
+            letter-spacing: 2px;
+            transform: rotate(-5deg);
         }
         .grid {
             display: grid;
@@ -61,19 +63,19 @@
             cursor: pointer;
             transition: all 0.3s ease;
             opacity: 0.7;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
         }
         .cell.active {
             transform: scale(0.95);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
             opacity: 1;
         }
         .cell.playing {
             animation: pulse 0.5s infinite alternate;
         }
-        .row-kick .cell { background-color: #ff6b6b; }
-        .row-snare .cell { background-color: #4ecdc4; }
-        .row-hihat .cell { background-color: #45b7d1; }
-        .row-tom .cell { background-color: #f7b731; }
+        .row-kick .cell { background-color: #ff6b6b; box-shadow: 0 0 10px #ff6b6b, 0 0 20px #ff6b6b; }
+        .row-snare .cell { background-color: #4ecdc4; box-shadow: 0 0 10px #4ecdc4, 0 0 20px #4ecdc4; }
+        .row-hihat .cell { background-color: #45b7d1; box-shadow: 0 0 10px #45b7d1, 0 0 20px #45b7d1; }
+        .row-tom .cell { background-color: #f7b731; box-shadow: 0 0 10px #f7b731, 0 0 20px #f7b731; }
         .column-playing {
             background-color: rgba(255, 255, 255, 0.2);
         }
@@ -89,12 +91,14 @@
             margin: 4px 2px;
             cursor: pointer;
             border-radius: 4px;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
             font-weight: 500;
             letter-spacing: 0.5px;
+            box-shadow: 0 0 10px #4CAF50;
         }
         button:hover {
             background-color: #45a049;
+            box-shadow: 0 0 20px #4CAF50;
         }
         .controls {
             margin-top: 20px;
@@ -144,9 +148,11 @@
         @keyframes pulse {
             0% {
                 transform: scale(1);
+                box-shadow: 0 0 5px currentColor;
             }
             100% {
                 transform: scale(1.1);
+                box-shadow: 0 0 20px currentColor;
             }
         }
         @media (max-width: 600px) {
@@ -217,7 +223,95 @@
     </div>
 
     <script>
-        // The JavaScript code remains the same as in the previous version
+        const kickAudio = new Audio('https://cdn.freesound.org/previews/171/171104_2394245-lq.mp3');
+        const snareAudio = new Audio('https://cdn.freesound.org/previews/3/3719-lq.mp3');
+        const hihatAudio = new Audio('https://cdn.freesound.org/previews/441/441912_9159316-lq.mp3');
+        const tomAudio = new Audio('https://cdn.freesound.org/previews/131/131347_2398403-lq.mp3');
+
+        const beatGrid = document.getElementById('beat-grid');
+        const playButton = document.getElementById('play-button');
+        const clearButton = document.getElementById('clear-button');
+        const tempoSlider = document.getElementById('tempo-slider');
+        const tempoValue = document.getElementById('tempo-value');
+        const volumeSliders = document.querySelectorAll('.volume-slider');
+
+        let isPlaying = false;
+        let currentBeat = 0;
+        let tempo = 120;
+        let intervalId;
+
+        const grid = [
+            Array(8).fill(false),
+            Array(8).fill(false),
+            Array(8).fill(false),
+            Array(8).fill(false)
+        ];
+
+        function createGrid() {
+            const instruments = ['kick', 'snare', 'hihat', 'tom'];
+            instruments.forEach((instrument, i) => {
+                const row = beatGrid.children[i].querySelector('.grid');
+                for (let j = 0; j < 8; j++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.addEventListener('click', () => toggleCell(i, j, cell));
+                    row.appendChild(cell);
+                }
+            });
+        }
+
+        function toggleCell(row, col, cell) {
+            grid[row][col] = !grid[row][col];
+            cell.classList.toggle('active');
+        }
+
+        function playBeat() {
+            const instruments = [kickAudio, snareAudio, hihatAudio, tomAudio];
+            instruments.forEach((audio, i) => {
+                if (grid[i][currentBeat]) {
+                    const clone = audio.cloneNode();
+                    clone.volume = volumeSliders[i].value / 100;
+                    clone.play();
+                }
+            });
+
+            document.querySelectorAll(`.cell:nth-child(${currentBeat + 1})`).forEach(cell => {
+                cell.classList.add('playing');
+                setTimeout(() => cell.classList.remove('playing'), 100);
+            });
+
+            currentBeat = (currentBeat + 1) % 8;
+        }
+
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                intervalId = setInterval(playBeat, (60 / tempo) * 1000);
+                playButton.textContent = 'Pause';
+            } else {
+                clearInterval(intervalId);
+                playButton.textContent = 'Play';
+            }
+        }
+
+        function clearGrid() {
+            grid.forEach(row => row.fill(false));
+            document.querySelectorAll('.cell').forEach(cell => cell.classList.remove('active'));
+        }
+
+        function updateTempo() {
+            tempo = tempoSlider.value;
+            tempoValue.textContent = tempo;
+            if (isPlaying) {
+                clearInterval(intervalId);
+                intervalId = setInterval(playBeat, (60 / tempo) * 1000);
+            }
+        }
+
+        createGrid();
+        playButton.addEventListener('click', togglePlay);
+        clearButton.addEventListener('click', clearGrid);
+        tempoSlider.addEventListener('input', updateTempo);
     </script>
 </body>
 </html>
