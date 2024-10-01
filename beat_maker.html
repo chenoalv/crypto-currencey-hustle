@@ -5,132 +5,93 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vibrant Urban Beat Maker with Soundboard</title>
     <style>
-        @keyframes neonPulse {
-            0%, 100% { text-shadow: 0 0 10px #ff00de, 0 0 20px #ff00de, 0 0 30px #ff00de; }
-            50% { text-shadow: 0 0 20px #ff00de, 0 0 30px #ff00de, 0 0 40px #ff00de; }
-        }
-        @keyframes cityLights {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
         body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            background: linear-gradient(45deg, #1a2633, #243447, #1a2633);
-            background-size: 400% 400%;
-            animation: cityLights 15s ease infinite;
+            font-family: Arial, sans-serif;
+            background-color: #1a1a2e;
+            color: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #fff;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
         }
         .container {
-            background: rgba(36, 52, 71, 0.8);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-            max-width: 900px;
-            width: 95%;
+            background-color: rgba(16, 16, 36, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
         }
         h1, h2 {
             text-align: center;
-            color: #ff00de;
-            animation: neonPulse 1.5s infinite;
-        }
-        h1 { font-size: 3em; margin-bottom: 20px; }
-        h2 { font-size: 2em; margin-top: 30px; }
-        .grid, .soundboard {
-            display: grid;
-            gap: 10px;
-            margin-bottom: 30px;
+            color: #ff00ff;
+            text-shadow: 0 0 10px #ff00ff;
         }
         .grid {
-            grid-template-columns: auto repeat(8, 1fr);
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
         }
-        .soundboard {
-            grid-template-columns: repeat(4, 1fr);
-        }
-        .row-label {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 15px;
-            font-weight: bold;
-            color: #4ecca3;
-        }
-        .cell, .sound-btn {
-            width: 45px;
-            height: 45px;
+        .cell {
+            width: 40px;
+            height: 40px;
+            background-color: #2a2a4e;
             border-radius: 50%;
             cursor: pointer;
-            transition: all 0.3s ease;
-            background: linear-gradient(145deg, #2a3b55, #32465e);
-            box-shadow: 4px 4px 8px #1c2736, -4px -4px 8px #3c5474;
+            transition: background-color 0.3s;
         }
-        .cell.active, .sound-btn:active {
-            background: linear-gradient(145deg, #4ecca3, #45b392);
-            box-shadow: inset 4px 4px 8px #3aa786, inset -4px -4px 8px #5ef1c0;
-        }
-        .sound-btn {
-            width: auto;
-            height: auto;
-            border-radius: 10px;
-            padding: 15px;
-            font-size: 16px;
-            font-weight: bold;
-            color: #4ecca3;
-            text-align: center;
+        .cell.active {
+            background-color: #00ff9d;
+            box-shadow: 0 0 10px #00ff9d;
         }
         .controls {
             display: flex;
-            justify-content: space-around;
-            margin-bottom: 30px;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
         }
         button {
-            padding: 12px 25px;
-            font-size: 18px;
+            background-color: #00ff9d;
+            color: #1a1a2e;
             border: none;
-            border-radius: 25px;
+            padding: 10px 20px;
+            border-radius: 5px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            background: linear-gradient(145deg, #4ecca3, #45b392);
-            color: #1a2633;
             font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            transition: all 0.3s;
         }
         button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(78, 204, 163, 0.3);
+            background-color: #00cc7a;
+            transform: scale(1.05);
         }
         .tempo-control {
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-top: 20px;
+            gap: 10px;
+            margin-bottom: 20px;
         }
-        .tempo-control input {
-            width: 60%;
-            margin: 0 15px;
+        input[type="range"] {
+            width: 200px;
         }
-        #bpm {
-            color: #4ecca3;
-            font-weight: bold;
+        .soundboard {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
         }
-        .skyline {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 30%;
-            background-image: 
-                linear-gradient(to top, #0a0a0a 0%, transparent 100%),
-                repeating-linear-gradient(90deg, #0a0a0a 0%, #0a0a0a 5%, transparent 5%, transparent 10%);
-            background-size: 100% 100%, 200px 100%;
-            z-index: -1;
+        .sound-btn {
+            background-color: #2a2a4e;
+            color: #00ff9d;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .sound-btn:hover {
+            background-color: #3a3a6e;
+            transform: scale(1.05);
         }
         .stars {
             position: fixed;
@@ -139,19 +100,19 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: -2;
+            z-index: -1;
         }
-        .star {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle 5s infinite;
-        }
-        @keyframes twinkle {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.2; }
+        .skyline {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background-image: url('path_to_your_skyline_image.png');
+            background-repeat: repeat-x;
+            background-position: bottom;
+            pointer-events: none;
+            z-index: -1;
         }
     </style>
 </head>
@@ -161,7 +122,6 @@
     <div class="container">
         <h1>Vibrant Beat Maker</h1>
         <div class="grid">
-            <div class="row-label">Kick</div>
             <div class="cell" data-sound="kick"></div>
             <div class="cell" data-sound="kick"></div>
             <div class="cell" data-sound="kick"></div>
@@ -170,8 +130,6 @@
             <div class="cell" data-sound="kick"></div>
             <div class="cell" data-sound="kick"></div>
             <div class="cell" data-sound="kick"></div>
-            
-            <div class="row-label">Snare</div>
             <div class="cell" data-sound="snare"></div>
             <div class="cell" data-sound="snare"></div>
             <div class="cell" data-sound="snare"></div>
@@ -180,8 +138,6 @@
             <div class="cell" data-sound="snare"></div>
             <div class="cell" data-sound="snare"></div>
             <div class="cell" data-sound="snare"></div>
-            
-            <div class="row-label">Hi-hat</div>
             <div class="cell" data-sound="hihat"></div>
             <div class="cell" data-sound="hihat"></div>
             <div class="cell" data-sound="hihat"></div>
@@ -190,8 +146,6 @@
             <div class="cell" data-sound="hihat"></div>
             <div class="cell" data-sound="hihat"></div>
             <div class="cell" data-sound="hihat"></div>
-            
-            <div class="row-label">Tom</div>
             <div class="cell" data-sound="tom"></div>
             <div class="cell" data-sound="tom"></div>
             <div class="cell" data-sound="tom"></div>
@@ -214,43 +168,162 @@
         
         <h2>Soundboard</h2>
         <div class="soundboard">
-            <div class="sound-btn" data-sound="kick">Kick</div>
-            <div class="sound-btn" data-sound="snare">Snare</div>
-            <div class="sound-btn" data-sound="hihat">Hi-hat</div>
-            <div class="sound-btn" data-sound="tom">Tom</div>
-            <div class="sound-btn" data-sound="clap">Clap</div>
-            <div class="sound-btn" data-sound="crash">Crash</div>
-            <div class="sound-btn" data-sound="cowbell">Cowbell</div>
-            <div class="sound-btn" data-sound="rimshot">Rimshot</div>
+            <button class="sound-btn" data-sound="kick">Kick</button>
+            <button class="sound-btn" data-sound="snare">Snare</button>
+            <button class="sound-btn" data-sound="hihat">Hi-hat</button>
+            <button class="sound-btn" data-sound="tom">Tom</button>
+            <button class="sound-btn" data-sound="clap">Clap</button>
+            <button class="sound-btn" data-sound="crash">Crash</button>
+            <button class="sound-btn" data-sound="cowbell">Cowbell</button>
+            <button class="sound-btn" data-sound="rimshot">Rimshot</button>
         </div>
     </div>
 
     <script>
-        // Your existing JavaScript for beat maker functionality
+        // Audio context
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        // Instrument sounds
+        const instruments = ['kick', 'snare', 'hihat', 'tom', 'clap', 'crash', 'cowbell', 'rimshot'];
+        const sounds = {};
+
+        // Generate sounds
+        function generateSound(frequency, duration, type = 'sine') {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.type = type;
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            
+            gainNode.gain.setValueAtTime(1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+
+        // Initialize sounds
+        instruments.forEach(instrument => {
+            switch(instrument) {
+                case 'kick':
+                    sounds[instrument] = () => generateSound(60, 0.1, 'sine');
+                    break;
+                case 'snare':
+                    sounds[instrument] = () => generateSound(200, 0.1, 'triangle');
+                    break;
+                case 'hihat':
+                    sounds[instrument] = () => generateSound(800, 0.05, 'square');
+                    break;
+                case 'tom':
+                    sounds[instrument] = () => generateSound(100, 0.1, 'sine');
+                    break;
+                case 'clap':
+                    sounds[instrument] = () => generateSound(300, 0.05, 'sawtooth');
+                    break;
+                case 'crash':
+                    sounds[instrument] = () => generateSound(1000, 0.3, 'square');
+                    break;
+                case 'cowbell':
+                    sounds[instrument] = () => generateSound(600, 0.1, 'triangle');
+                    break;
+                case 'rimshot':
+                    sounds[instrument] = () => generateSound(400, 0.05, 'square');
+                    break;
+            }
+        });
+
+        // Beat grid
+        const grid = document.querySelector('.grid');
+        const cells = grid.querySelectorAll('.cell');
+        let isPlaying = false;
+        let currentBeat = 0;
+
+        // Tempo
+        let tempo = 120;
+        const tempoSlider = document.getElementById('tempo');
+        const bpmDisplay = document.getElementById('bpm');
+
+        // Update tempo
+        tempoSlider.addEventListener('input', () => {
+            tempo = parseInt(tempoSlider.value);
+            bpmDisplay.textContent = `${tempo} BPM`;
+        });
+
+        // Toggle cell active state
+        cells.forEach(cell => {
+            cell.addEventListener('click', () => {
+                cell.classList.toggle('active');
+            });
+        });
+
+        // Play/Stop buttons
+        const playButton = document.getElementById('play');
+        const stopButton = document.getElementById('stop');
+
+        playButton.addEventListener('click', startPlayback);
+        stopButton.addEventListener('click', stopPlayback);
+
+        // Clear button
+        const clearButton = document.getElementById('clear');
+        clearButton.addEventListener('click', () => {
+            cells.forEach(cell => cell.classList.remove('active'));
+        });
+
+        // Playback function
+        function startPlayback() {
+            if (isPlaying) return;
+            isPlaying = true;
+            currentBeat = 0;
+            playBeat();
+        }
+
+        function stopPlayback() {
+            isPlaying = false;
+        }
+
+        function playBeat() {
+            if (!isPlaying) return;
+
+            cells.forEach((cell, index) => {
+                if (index % 8 === currentBeat && cell.classList.contains('active')) {
+                    const soundName = cell.dataset.sound;
+                    sounds[soundName]();
+                }
+            });
+
+            currentBeat = (currentBeat + 1) % 8;
+            setTimeout(playBeat, (60 / tempo) * 1000);
+        }
+
+        // Soundboard functionality
+        document.querySelectorAll('.sound-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const sound = this.dataset.sound;
+                sounds[sound]();
+            });
+        });
 
         // Add stars to the background
         function createStars() {
             const starsContainer = document.querySelector('.stars');
             for (let i = 0; i < 100; i++) {
                 const star = document.createElement('div');
-                star.classList.add('star');
+                star.style.position = 'absolute';
                 star.style.left = `${Math.random() * 100}%`;
                 star.style.top = `${Math.random() * 100}%`;
-                star.style.animationDelay = `${Math.random() * 5}s`;
+                star.style.width = `${Math.random() * 3}px`;
+                star.style.height = star.style.width;
+                star.style.backgroundColor = 'white';
+                star.style.borderRadius = '50%';
                 starsContainer.appendChild(star);
             }
         }
-        createStars();
 
-        // Add functionality to soundboard buttons
-        document.querySelectorAll('.sound-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const sound = this.dataset.sound;
-                // Play the corresponding sound
-                // You'll need to implement this part based on how your sounds are loaded/played
-                console.log(`Playing ${sound} sound`);
-            });
-        });
+        // Initialize
+        createStars();
     </script>
 </body>
 </html>
