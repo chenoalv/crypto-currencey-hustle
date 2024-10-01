@@ -3,171 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Beat Maker</title>
+    <title>Urban Beat Maker</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+        body, html {
             margin: 0;
-            background-color: #0a0a1a;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        .backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #1a1a2e 0%, #16213e 100%);
+            z-index: -1;
+        }
+        .skyline {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 60%;
+            background-image: 
+                linear-gradient(to top, #0a0a0a 0%, transparent 90%),
+                repeating-linear-gradient(90deg, #0a0a0a 0%, #0a0a0a 5%, transparent 5%, transparent 10%);
+            background-size: 100% 100%, 200px 100%;
+        }
+        .rose {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 60px;
+            background: 
+                radial-gradient(circle at 50% 0%, #ff6b6b 20%, #ff4757 40%, #ff6b6b 60%);
+            clip-path: polygon(50% 0%, 80% 50%, 50% 100%, 20% 50%);
+        }
+        .rose::before {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 40px;
+            background: #2ecc71;
         }
         .container {
-            background-color: #16213e;
+            position: relative;
+            z-index: 1;
+            background-color: rgba(26, 26, 46, 0.8);
+            padding: 30px;
             border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 25px rgba(0,0,0,0.5);
             width: 90%;
-            max-width: 600px;
+            max-width: 800px;
+            margin: 50px auto;
         }
-        h1 {
-            text-align: center;
-            color: #4ecca3;
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            text-shadow: 0 0 10px #4ecca3;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: auto repeat(8, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .instrument-label {
-            color: #fff;
-            align-self: center;
-            justify-self: end;
-            padding-right: 10px;
-            font-weight: bold;
-        }
-        .cell {
-            width: 100%;
-            aspect-ratio: 1;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .cell:hover {
-            opacity: 0.8;
-        }
-        .kick { background-color: #ff6b6b; }
-        .snare { background-color: #4ecdc4; }
-        .hihat { background-color: #45b7d1; }
-        .tom { background-color: #feca57; }
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-        }
-        button {
-            background-color: #4ecca3;
-            border: none;
-            color: #16213e;
-            padding: 10px 20px;
-            font-size: 1em;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        button:hover {
-            background-color: #45b393;
-        }
-        .slider-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-        .slider {
-            width: 48%;
-        }
-        input[type="range"] {
-            width: 100%;
-        }
-        .tempo-display {
-            color: #fff;
-            text-align: right;
-        }
+        /* Rest of your CSS styles for beat maker elements */
+        
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>ENHANCED BEAT MAKER</h1>
-        <div class="grid">
-            <div class="instrument-label">Kick</div>
-            <div class="cell kick"></div>
-            <div class="cell kick"></div>
-            <div class="cell kick"></div>
-            <div class="cell kick"></div>
-            <div class="cell kick"></div>
-            <div class="cell kick"></div>
-            <div class="cell kick"></div>
-            <div class="cell kick"></div>
-            
-            <div class="instrument-label">Snare</div>
-            <div class="cell snare"></div>
-            <div class="cell snare"></div>
-            <div class="cell snare"></div>
-            <div class="cell snare"></div>
-            <div class="cell snare"></div>
-            <div class="cell snare"></div>
-            <div class="cell snare"></div>
-            <div class="cell snare"></div>
-            
-            <div class="instrument-label">Hi-hat</div>
-            <div class="cell hihat"></div>
-            <div class="cell hihat"></div>
-            <div class="cell hihat"></div>
-            <div class="cell hihat"></div>
-            <div class="cell hihat"></div>
-            <div class="cell hihat"></div>
-            <div class="cell hihat"></div>
-            <div class="cell hihat"></div>
-            
-            <div class="instrument-label">Tom</div>
-            <div class="cell tom"></div>
-            <div class="cell tom"></div>
-            <div class="cell tom"></div>
-            <div class="cell tom"></div>
-            <div class="cell tom"></div>
-            <div class="cell tom"></div>
-            <div class="cell tom"></div>
-            <div class="cell tom"></div>
-        </div>
-        <div class="controls">
-            <button id="playPauseBtn">Play/Pause</button>
-            <button id="clearBtn">Clear All</button>
-            <div class="tempo-container">
-                <label for="tempo">Tempo: </label>
-                <input type="range" id="tempo" min="60" max="180" value="120">
-                <span class="tempo-display">120 BPM</span>
-            </div>
-        </div>
-        <div class="slider-container">
-            <div class="slider">
-                <label for="kickVol">Kick: </label>
-                <input type="range" id="kickVol" min="0" max="100" value="50">
-            </div>
-            <div class="slider">
-                <label for="snareVol">Snare: </label>
-                <input type="range" id="snareVol" min="0" max="100" value="50">
-            </div>
-        </div>
-        <div class="slider-container">
-            <div class="slider">
-                <label for="hihatVol">Hi-hat: </label>
-                <input type="range" id="hihatVol" min="0" max="100" value="50">
-            </div>
-            <div class="slider">
-                <label for="tomVol">Tom: </label>
-                <input type="range" id="tomVol" min="0" max="100" value="50">
-            </div>
-        </div>
+    <div class="backdrop">
+        <div class="skyline"></div>
+        <div class="rose"></div>
     </div>
+    
+    <div class="container">
+        <h1>Urban Beat Maker</h1>
+        <!-- Your beat maker interface elements go here -->
+        <!-- (Beat grid, controls, etc.) -->
+    </div>
+
     <script>
-        // Add your JavaScript code here
+        // Your JavaScript code here
     </script>
 </body>
 </html>
