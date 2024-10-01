@@ -3,82 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Beat Maker</title>
+    <title>Vibrant Urban Beat Maker with Soundboard</title>
     <style>
+        @keyframes neonPulse {
+            0%, 100% { text-shadow: 0 0 10px #ff00de, 0 0 20px #ff00de, 0 0 30px #ff00de; }
+            50% { text-shadow: 0 0 20px #ff00de, 0 0 30px #ff00de, 0 0 40px #ff00de; }
+        }
+        @keyframes cityLights {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #1a2633, #243447, #1a2633);
+            background-size: 400% 400%;
+            animation: cityLights 15s ease infinite;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #1a2633;
             color: #fff;
         }
         .container {
-            background-color: #243447;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            width: 90%;
-            max-width: 600px;
+            background: rgba(36, 52, 71, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            max-width: 900px;
+            width: 95%;
         }
-        h1 {
+        h1, h2 {
             text-align: center;
-            color: #4ecca3;
-            margin-bottom: 20px;
+            color: #ff00de;
+            animation: neonPulse 1.5s infinite;
+        }
+        h1 { font-size: 3em; margin-bottom: 20px; }
+        h2 { font-size: 2em; margin-top: 30px; }
+        .grid, .soundboard {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 30px;
         }
         .grid {
-            display: grid;
             grid-template-columns: auto repeat(8, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
+        }
+        .soundboard {
+            grid-template-columns: repeat(4, 1fr);
         }
         .row-label {
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            padding-right: 10px;
+            padding-right: 15px;
             font-weight: bold;
+            color: #4ecca3;
         }
-        .cell {
-            width: 40px;
-            height: 40px;
-            border-radius: 5px;
+        .cell, .sound-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
             cursor: pointer;
-            transition: opacity 0.3s;
-            background-color: #4ecca3;
-            opacity: 0.3;
+            transition: all 0.3s ease;
+            background: linear-gradient(145deg, #2a3b55, #32465e);
+            box-shadow: 4px 4px 8px #1c2736, -4px -4px 8px #3c5474;
         }
-        .cell.active {
-            opacity: 1;
+        .cell.active, .sound-btn:active {
+            background: linear-gradient(145deg, #4ecca3, #45b392);
+            box-shadow: inset 4px 4px 8px #3aa786, inset -4px -4px 8px #5ef1c0;
+        }
+        .sound-btn {
+            width: auto;
+            height: auto;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #4ecca3;
+            text-align: center;
         }
         .controls {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+            justify-content: space-around;
+            margin-bottom: 30px;
         }
         button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4ecca3;
-            color: white;
+            padding: 12px 25px;
+            font-size: 18px;
             border: none;
-            border-radius: 5px;
+            border-radius: 25px;
             cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(145deg, #4ecca3, #45b392);
+            color: #1a2633;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(78, 204, 163, 0.3);
         }
         .tempo-control {
             display: flex;
             align-items: center;
+            justify-content: center;
             margin-top: 20px;
         }
         .tempo-control input {
-            width: 100%;
-            margin: 0 10px;
+            width: 60%;
+            margin: 0 15px;
         }
-        
-        /* Urban theme additions */
+        #bpm {
+            color: #4ecca3;
+            font-weight: bold;
+        }
         .skyline {
             position: fixed;
             bottom: 0;
@@ -91,34 +132,34 @@
             background-size: 100% 100%, 200px 100%;
             z-index: -1;
         }
-        .rose {
+        .stars {
             position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 30px;
-            background: radial-gradient(circle at 50% 0%, #ff6b6b 20%, #ff4757 40%, #ff6b6b 60%);
-            clip-path: polygon(50% 0%, 80% 50%, 50% 100%, 20% 50%);
-            z-index: -1;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -2;
         }
-        .rose::before {
-            content: '';
+        .star {
             position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
             width: 2px;
-            height: 20px;
-            background: #2ecc71;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 5s infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.2; }
         }
     </style>
 </head>
 <body>
+    <div class="stars"></div>
     <div class="skyline"></div>
-    <div class="rose"></div>
     <div class="container">
-        <h1>Urban Beat Maker</h1>
+        <h1>Vibrant Beat Maker</h1>
         <div class="grid">
             <div class="row-label">Kick</div>
             <div class="cell" data-sound="kick"></div>
@@ -170,11 +211,46 @@
             <input type="range" id="tempo" min="60" max="180" value="120">
             <span id="bpm">120 BPM</span>
         </div>
+        
+        <h2>Soundboard</h2>
+        <div class="soundboard">
+            <div class="sound-btn" data-sound="kick">Kick</div>
+            <div class="sound-btn" data-sound="snare">Snare</div>
+            <div class="sound-btn" data-sound="hihat">Hi-hat</div>
+            <div class="sound-btn" data-sound="tom">Tom</div>
+            <div class="sound-btn" data-sound="clap">Clap</div>
+            <div class="sound-btn" data-sound="crash">Crash</div>
+            <div class="sound-btn" data-sound="cowbell">Cowbell</div>
+            <div class="sound-btn" data-sound="rimshot">Rimshot</div>
+        </div>
     </div>
 
     <script>
-        // Your existing JavaScript code goes here
-        // Make sure to keep all the functionality you've already implemented
+        // Your existing JavaScript for beat maker functionality
+
+        // Add stars to the background
+        function createStars() {
+            const starsContainer = document.querySelector('.stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                starsContainer.appendChild(star);
+            }
+        }
+        createStars();
+
+        // Add functionality to soundboard buttons
+        document.querySelectorAll('.sound-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const sound = this.dataset.sound;
+                // Play the corresponding sound
+                // You'll need to implement this part based on how your sounds are loaded/played
+                console.log(`Playing ${sound} sound`);
+            });
+        });
     </script>
 </body>
 </html>
