@@ -187,16 +187,36 @@
         const instruments = ['kick', 'snare', 'hihat', 'tom', 'clap', 'crash', 'cowbell', 'rimshot'];
         const sounds = {};
 
+        // Envelope generator
+        function createEnvelope(attackTime, decayTime, sustainLevel, releaseTime) {
+            return (time) => {
+                if (time < attackTime) {
+                    return time / attackTime;
+                } else if (time < attackTime + decayTime) {
+                    return 1 - (1 - sustainLevel) * ((time - attackTime) / decayTime);
+                } else {
+                    return sustainLevel * Math.max(0, 1 - (time - attackTime - decayTime) / releaseTime);
+                }
+            };
+        }
+
         // Generate sounds
-        function generateSound(frequency, duration, type = 'sine') {
+        function generateSound(frequency, duration, type = 'sine', envelope) {
             const oscillator = audioContext.createOscillator();
             const gainNode = audioContext.createGain();
             
             oscillator.type = type;
             oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
             
-            gainNode.gain.setValueAtTime(1, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+            const envelopeFunc = envelope || createEnvelope(0.01, 0.1, 0.5, 0.1);
+            
+            const startTime = audioContext.currentTime;
+            gainNode.gain.setValueAtTime(0, startTime);
+            
+            for (let i = 0; i <= duration * 100; i++) {
+                const t = i / 100;
+                gainNode.gain.linearRampToValueAtTime(envelopeFunc(t), startTime + t);
+            }
             
             oscillator.connect(gainNode);
             gainNode.connect(audioContext.destination);
@@ -209,28 +229,31 @@
         instruments.forEach(instrument => {
             switch(instrument) {
                 case 'kick':
-                    sounds[instrument] = () => generateSound(60, 0.1, 'sine');
+                    sounds[instrument] = () => generateSound(60, 0.1, 'sine', createEnvelope(0.001, 0.1, 0, 0.1));
                     break;
                 case 'snare':
-                    sounds[instrument] = () => generateSound(200, 0.1, 'triangle');
+                    sounds[instrument] = () => {
+                        generateSound(200, 0.1, 'triangle', createEnvelope(0.001, 0.1, 0, 0.1));
+                        generateSound(400, 0.1, 'noise', createEnvelope(0.001, 0.1, 0, 0.1));
+                    };
                     break;
                 case 'hihat':
-                    sounds[instrument] = () => generateSound(800, 0.05, 'square');
+                    sounds[instrument] = () => generateSound(800, 0.05, 'square', createEnvelope(0.001, 0.05, 0, 0.05));
                     break;
                 case 'tom':
-                    sounds[instrument] = () => generateSound(100, 0.1, 'sine');
+                    sounds[instrument] = () => generateSound(100, 0.1, 'sine', createEnvelope(0.001, 0.1, 0, 0.1));
                     break;
                 case 'clap':
-                    sounds[instrument] = () => generateSound(300, 0.05, 'sawtooth');
+                    sounds[instrument] = () => generateSound(300, 0.05, 'sawtooth', createEnvelope(0.001, 0.05, 0, 0.05));
                     break;
                 case 'crash':
-                    sounds[instrument] = () => generateSound(1000, 0.3, 'square');
+                    sounds[instrument] = () => generateSound(1000, 0.3, 'square', createEnvelope(0.001, 0.3, 0.1, 0.3));
                     break;
                 case 'cowbell':
-                    sounds[instrument] = () => generateSound(600, 0.1, 'triangle');
+                    sounds[instrument] = () => generateSound(600, 0.1, 'triangle', createEnvelope(0.001, 0.1, 0, 0.1));
                     break;
                 case 'rimshot':
-                    sounds[instrument] = () => generateSound(400, 0.05, 'square');
+                    sounds[instrument] = () => generateSound(400, 0.05, 'square', createEnvelope(0.001, 0.05, 0, 0.05));
                     break;
             }
         });
