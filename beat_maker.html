@@ -120,6 +120,29 @@
             50% { opacity: 1; }
             100% { opacity: 0; }
         }
+        #mixingPanel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .track-controls {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .track-controls h3 {
+            margin-top: 0;
+            color: #ff3e3e;
+        }
+        .track-controls input[type="range"] {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        .track-controls span {
+            font-size: 0.8em;
+        }
     </style>
 </head>
 <body>
@@ -147,6 +170,14 @@
         </div>
         <h2>Soundboard</h2>
         <div id="soundboard"></div>
+        <h2>Mixing Panel</h2>
+        <div id="mixingPanel">
+            <div class="track-controls">
+                <h3>Master</h3>
+                <input type="range" id="masterVolume" min="0" max="1" step="0.01" value="1">
+                <span id="masterVolumeValue">100%</span>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -162,6 +193,9 @@
         const beatSelect = document.getElementById('beatSelect');
         const loadBeatButton = document.getElementById('loadBeat');
         const soundboard = document.getElementById('soundboard');
+        const masterVolumeControl = document.getElementById('masterVolume');
+        const masterVolumeValue = document.getElementById('masterVolumeValue');
+        const mixingPanel = document.getElementById('mixingPanel');
 
         const rows = 4;
         const cols = 8;
@@ -178,6 +212,11 @@
         ];
 
         const buffers = {};
+
+        let masterGainNode = audioContext.createGain();
+        masterGainNode.connect(audioContext.destination);
+
+        const trackGainNodes = {};
 
         // Create grid
         for (let i = 0; i < rows; i++) {
@@ -205,6 +244,61 @@
             button.textContent = sound.name;
             button.addEventListener('click', () => playSound(sound.name));
             soundboard.appendChild(button);
+
+            const trackControls = document.createElement('div');
+            trackControls.classList.add('track-controls');
+            
+            const trackName = document.createElement('h3');
+            trackName.textContent = sound.name;
+            
+            const volumeControl = document.createElement('input');
+            volumeControl.type = 'range';
+            volumeControl.min = '0';
+            volumeControl.max = '1';
+            volumeControl.step = '0.01';
+            volumeControl.value = '1';
+            
+            const volumeValue = document.createElement('span');
+            volumeValue.textContent = '100%';
+            
+            const panControl = document.createElement('input');
+            panControl.type = 'range';
+            panControl.min = '-1';
+            panControl.max = '1';
+            panControl.step = '0.1';
+            panControl.value = '0';
+            
+            const panValue = document.createElement('span');
+            panValue.textContent = 'C';
+
+            trackControls.appendChild(trackName);
+            trackControls.appendChild(volumeControl);
+            trackControls.appendChild(volumeValue);
+            trackControls.appendChild(panControl);
+            trackControls.appendChild(panValue);
+            
+            mixingPanel.appendChild(trackControls);
+
+            const gainNode = audioContext.createGain();
+            const panNode = audioContext.createStereoPanner();
+            gainNode.connect(panNode);
+            panNode.connect(masterGainNode);
+            trackGainNodes[sound.name] = { gain: gainNode, pan: panNode };
+
+            volumeControl.addEventListener('input', (e) => {
+                gainNode.gain.setValueAtTime(e.target.value, audioContext.currentTime);
+                volumeValue.textContent = `${Math.round(e.target.value * 100)}%`;
+            });
+
+            panControl.addEventListener('input', (e) => {
+                panNode.pan.setValueAtTime(e.target.value, audioContext.currentTime);
+                panValue.textContent = e.target.value == 0 ? 'C' : (e.target.value < 0 ? 'L' : 'R');
+            });
+        });
+
+        masterVolumeControl.addEventListener('input', (e) => {
+            masterGainNode.gain.setValueAtTime(e.target.value, audioContext.currentTime);
+            masterVolumeValue.textContent = `${Math.round(e.target.value * 100)}%`;
         });
 
         function toggleCell(event) {
@@ -214,7 +308,7 @@
         function playSound(soundName) {
             const source = audioContext.createBufferSource();
             source.buffer = buffers[soundName];
-            source.connect(audioContext.destination);
+            source.connect(trackGainNodes[soundName].gain);
             source.start();
         }
 
