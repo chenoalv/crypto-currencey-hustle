@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urban Beat Maker</title>
+    <title>Enhanced Urban Beat Maker</title>
     <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
     <style>
         body {
@@ -25,6 +25,8 @@
             z-index: 1;
             position: relative;
             overflow: hidden;
+            max-width: 800px;
+            width: 100%;
         }
         .container::before {
             content: '';
@@ -115,6 +117,21 @@
             color: #ffffff;
             border: none;
         }
+        #soundboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .volume-control {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .volume-control input {
+            width: 100%;
+        }
         @keyframes twinkle {
             0% { opacity: 0; }
             50% { opacity: 1; }
@@ -125,7 +142,7 @@
 <body>
     <div class="stars"></div>
     <div class="container">
-        <h1>Urban Beat Maker</h1>
+        <h1>Enhanced Urban Beat Maker</h1>
         <div class="grid" id="grid"></div>
         <div class="controls">
             <button id="playPause">Play</button>
@@ -178,6 +195,7 @@
         ];
 
         const buffers = {};
+        const gainNodes = {};
 
         // Create grid
         for (let i = 0; i < rows; i++) {
@@ -191,21 +209,52 @@
             }
         }
 
-        // Load sounds
-        sounds.forEach(sound => {
-            fetch(sound.url)
-                .then(response => response.arrayBuffer())
-                .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
-                .then(audioBuffer => {
+        // Improved sound loading
+        async function loadSounds() {
+            const loadPromises = sounds.map(async (sound) => {
+                try {
+                    const response = await fetch(sound.url);
+                    const arrayBuffer = await response.arrayBuffer();
+                    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
                     buffers[sound.name] = audioBuffer;
-                })
-                .catch(error => console.error('Error loading sound:', error));
 
-            const button = document.createElement('button');
-            button.textContent = sound.name;
-            button.addEventListener('click', () => playSound(sound.name));
-            soundboard.appendChild(button);
-        });
+                    // Create gain node for volume control
+                    const gainNode = audioContext.createGain();
+                    gainNode.connect(audioContext.destination);
+                    gainNodes[sound.name] = gainNode;
+
+                    // Create soundboard button and volume control
+                    const soundElement = document.createElement('div');
+                    const button = document.createElement('button');
+                    button.textContent = sound.name;
+                    button.addEventListener('click', () => playSound(sound.name));
+                    soundElement.appendChild(button);
+
+                    const volumeControl = document.createElement('div');
+                    volumeControl.className = 'volume-control';
+                    const volumeSlider = document.createElement('input');
+                    volumeSlider.type = 'range';
+                    volumeSlider.min = 0;
+                    volumeSlider.max = 1;
+                    volumeSlider.step = 0.1;
+                    volumeSlider.value = 1;
+                    volumeSlider.addEventListener('input', (e) => {
+                        gainNodes[sound.name].gain.setValueAtTime(e.target.value, audioContext.currentTime);
+                    });
+                    volumeControl.appendChild(volumeSlider);
+                    soundElement.appendChild(volumeControl);
+
+                    soundboard.appendChild(soundElement);
+                } catch (error) {
+                    console.error('Error loading sound:', sound.name, error);
+                }
+            });
+
+            await Promise.all(loadPromises);
+            console.log('All sounds loaded');
+        }
+
+        loadSounds();
 
         function toggleCell(event) {
             event.target.classList.toggle('active');
@@ -214,7 +263,7 @@
         function playSound(soundName) {
             const source = audioContext.createBufferSource();
             source.buffer = buffers[soundName];
-            source.connect(audioContext.destination);
+            source.connect(gainNodes[soundName]);
             source.start();
         }
 
@@ -237,7 +286,7 @@
         function pausePlayback() {
             isPlaying = false;
             playPauseButton.textContent = 'Play';
-            clearInterval(intervalId);
+            clearTimeout(intervalId);
         }
 
         function stopPlayback() {
