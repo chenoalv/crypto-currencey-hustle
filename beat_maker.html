@@ -45,6 +45,10 @@
             background-color: #00ff9d;
             box-shadow: 0 0 10px #00ff9d;
         }
+        .cell.current {
+            border: 2px solid #ff00ff;
+            box-shadow: 0 0 10px #ff00ff;
+        }
         .controls {
             display: flex;
             justify-content: center;
@@ -305,12 +309,22 @@
 
         function stopPlayback() {
             isPlaying = false;
+            // Remove 'current' class from all cells when stopping
+            cells.forEach(cell => cell.classList.remove('current'));
         }
 
         function playBeat() {
             if (!isPlaying) return;
 
             cells.forEach((cell, index) => {
+                // Remove 'current' class from all cells
+                cell.classList.remove('current');
+                
+                // Add 'current' class to cells in the current beat
+                if (index % 8 === currentBeat) {
+                    cell.classList.add('current');
+                }
+
                 if (index % 8 === currentBeat && cell.classList.contains('active')) {
                     const soundName = cell.dataset.sound;
                     sounds[soundName]();
