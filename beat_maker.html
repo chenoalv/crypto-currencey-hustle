@@ -1,170 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Urban Beat Maker</title>
-    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #1a1a2e;
-            color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-        }
-        .container {
-            background-color: rgba(42, 42, 78, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            z-index: 1;
-            position: relative;
-            overflow: hidden;
-            max-width: 800px;
-            width: 100%;
-        }
-        .container::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            background: linear-gradient(45deg, #ff3e3e, #4a4aff);
-            filter: blur(20px);
-            opacity: 0.3;
-            z-index: -1;
-        }
-        h1, h2 {
-            font-family: 'Permanent Marker', cursive;
-            text-align: center;
-            color: #ff3e3e;
-            text-shadow: 2px 2px #4a4aff;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(8, 1fr);
-            gap: 5px;
-            margin-bottom: 20px;
-        }
-        .cell {
-            width: 40px;
-            height: 40px;
-            background-color: #16213e;
-            border: 1px solid #0f3460;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .cell.active {
-            background-color: #ff3e3e;
-            box-shadow: 0 0 10px #ff3e3e;
-        }
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        button {
-            font-family: 'Permanent Marker', cursive;
-            background-color: #4a4aff;
-            color: #ffffff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            text-shadow: 1px 1px #000000;
-        }
-        button:hover {
-            background-color: #ff3e3e;
-        }
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
-        .tempo-control {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .tempo-control input {
-            width: 200px;
-        }
-        .save-load-controls {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        #beatSelect {
-            padding: 5px;
-            border-radius: 5px;
-            background-color: #2a2a4e;
-            color: #ffffff;
-            border: none;
-        }
-        #soundboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .volume-control {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 10px;
-        }
-        .volume-control input {
-            width: 100%;
-        }
-        @keyframes twinkle {
-            0% { opacity: 0; }
-            50% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-    </style>
+    <!-- ... (keep the existing head content) ... -->
 </head>
 <body>
-    <div class="stars"></div>
-    <div class="container">
-        <h1>Enhanced Urban Beat Maker</h1>
-        <div class="grid" id="grid"></div>
-        <div class="controls">
-            <button id="playPause">Play</button>
-            <button id="stop">Stop</button>
-            <button id="clear">Clear</button>
-        </div>
-        <div class="tempo-control">
-            <span>Tempo:</span>
-            <input type="range" id="tempo" min="60" max="180" value="120">
-            <span id="bpm">120 BPM</span>
-        </div>
-        <div class="save-load-controls">
-            <input type="text" id="beatName" placeholder="Beat name">
-            <button id="saveBeat">Save Beat</button>
-            <select id="beatSelect">
-                <option value="">Select a beat</option>
-            </select>
-            <button id="loadBeat">Load Beat</button>
-        </div>
-        <h2>Soundboard</h2>
-        <div id="soundboard"></div>
-    </div>
+    <!-- ... (keep the existing body content) ... -->
 
     <script>
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -188,13 +28,12 @@
         let intervalId;
 
         const sounds = [
-            { name: 'Kick', url: 'https://example.com/kick.wav' },
-            { name: 'Snare', url: 'https://example.com/snare.wav' },
-            { name: 'Hi-hat', url: 'https://example.com/hihat.wav' },
-            { name: 'Clap', url: 'https://example.com/clap.wav' }
+            { name: 'Kick', frequency: 100, decay: 0.1 },
+            { name: 'Snare', frequency: 250, decay: 0.05 },
+            { name: 'Hi-hat', frequency: 1000, decay: 0.02 },
+            { name: 'Clap', frequency: 400, decay: 0.03 }
         ];
 
-        const buffers = {};
         const gainNodes = {};
 
         // Create grid
@@ -209,69 +48,60 @@
             }
         }
 
-        // Improved sound loading
-        async function loadSounds() {
-            const loadPromises = sounds.map(async (sound) => {
-                try {
-                    const response = await fetch(sound.url);
-                    const arrayBuffer = await response.arrayBuffer();
-                    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-                    buffers[sound.name] = audioBuffer;
+        // Create soundboard and gain nodes
+        sounds.forEach(sound => {
+            const gainNode = audioContext.createGain();
+            gainNode.connect(audioContext.destination);
+            gainNodes[sound.name] = gainNode;
 
-                    // Create gain node for volume control
-                    const gainNode = audioContext.createGain();
-                    gainNode.connect(audioContext.destination);
-                    gainNodes[sound.name] = gainNode;
+            const soundElement = document.createElement('div');
+            const button = document.createElement('button');
+            button.textContent = sound.name;
+            button.addEventListener('click', () => playSound(sound));
+            soundElement.appendChild(button);
 
-                    // Create soundboard button and volume control
-                    const soundElement = document.createElement('div');
-                    const button = document.createElement('button');
-                    button.textContent = sound.name;
-                    button.addEventListener('click', () => playSound(sound.name));
-                    soundElement.appendChild(button);
-
-                    const volumeControl = document.createElement('div');
-                    volumeControl.className = 'volume-control';
-                    const volumeSlider = document.createElement('input');
-                    volumeSlider.type = 'range';
-                    volumeSlider.min = 0;
-                    volumeSlider.max = 1;
-                    volumeSlider.step = 0.1;
-                    volumeSlider.value = 1;
-                    volumeSlider.addEventListener('input', (e) => {
-                        gainNodes[sound.name].gain.setValueAtTime(e.target.value, audioContext.currentTime);
-                    });
-                    volumeControl.appendChild(volumeSlider);
-                    soundElement.appendChild(volumeControl);
-
-                    soundboard.appendChild(soundElement);
-                } catch (error) {
-                    console.error('Error loading sound:', sound.name, error);
-                }
+            const volumeControl = document.createElement('div');
+            volumeControl.className = 'volume-control';
+            const volumeSlider = document.createElement('input');
+            volumeSlider.type = 'range';
+            volumeSlider.min = 0;
+            volumeSlider.max = 1;
+            volumeSlider.step = 0.1;
+            volumeSlider.value = 1;
+            volumeSlider.addEventListener('input', (e) => {
+                gainNodes[sound.name].gain.setValueAtTime(e.target.value, audioContext.currentTime);
             });
+            volumeControl.appendChild(volumeSlider);
+            soundElement.appendChild(volumeControl);
 
-            await Promise.all(loadPromises);
-            console.log('All sounds loaded');
-        }
-
-        loadSounds();
+            soundboard.appendChild(soundElement);
+        });
 
         function toggleCell(event) {
             event.target.classList.toggle('active');
         }
 
-        function playSound(soundName) {
-            const source = audioContext.createBufferSource();
-            source.buffer = buffers[soundName];
-            source.connect(gainNodes[soundName]);
-            source.start();
+        function playSound(sound) {
+            const oscillator = audioContext.createOscillator();
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(sound.frequency, audioContext.currentTime);
+
+            const gainNode = audioContext.createGain();
+            gainNode.gain.setValueAtTime(1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + sound.decay);
+
+            oscillator.connect(gainNode);
+            gainNode.connect(gainNodes[sound.name]);
+
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + sound.decay);
         }
 
         function playSounds(beat) {
             const activeCells = grid.querySelectorAll(`.cell[data-col="${beat}"].active`);
             activeCells.forEach(cell => {
-                const row = cell.dataset.row;
-                playSound(sounds[row].name);
+                const row = parseInt(cell.dataset.row);
+                playSound(sounds[row]);
             });
         }
 
