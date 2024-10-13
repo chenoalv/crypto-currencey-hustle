@@ -101,6 +101,21 @@
             padding: 20px 0;
             margin-top: 50px;
         }
+        .cta-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--fl-orange);
+            color: var(--fl-black);
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin-bottom: 20px;
+        }
+        .cta-button:hover {
+            background-color: var(--fl-light-gray);
+            color: var(--fl-orange);
+        }
     </style>
 </head>
 <body>
@@ -150,10 +165,12 @@
         </section>
 
         <section id="beatpad">
-            <h2>Try Our Interactive Beat Pad</h2>
+            <h2>Create Your Own Beats</h2>
+            <p>Ready to make some music? Try our interactive beat maker!</p>
+            <a href="beat_maker.html" class="cta-button">Launch Beat Maker</a>
             <div class="beat-pad">
-                <!-- Placeholder for interactive beat pad -->
-                <p>Interactive Beat Pad Goes Here</p>
+                <!-- Placeholder for interactive beat pad preview -->
+                <p>Beat Pad Preview</p>
             </div>
         </section>
 
