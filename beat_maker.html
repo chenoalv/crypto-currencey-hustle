@@ -10,21 +10,20 @@
             font-family: Arial, sans-serif;
             background-color: #1a1a2e;
             color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
-            overflow: hidden;
+            padding: 20px;
+            min-height: 100vh;
+            overflow-y: auto; /* Allow vertical scrolling */
         }
         .container {
             background-color: rgba(42, 42, 78, 0.8);
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            z-index: 1;
             position: relative;
             overflow: hidden;
+            max-width: 800px;
+            margin: 0 auto;
         }
         .container::before {
             content: '';
@@ -89,7 +88,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 0;
+            z-index: -1;
             pointer-events: none;
         }
         .tempo-control {
@@ -182,181 +181,127 @@
 
     <script>
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const masterGainNode = audioContext.createGain();
+        masterGainNode.connect(audioContext.destination);
+
         const grid = document.getElementById('grid');
         const playPauseButton = document.getElementById('playPause');
         const stopButton = document.getElementById('stop');
         const clearButton = document.getElementById('clear');
-        const tempoControl = document.getElementById('tempo');
+        const tempoSlider = document.getElementById('tempo');
         const bpmDisplay = document.getElementById('bpm');
-        const beatNameInput = document.getElementById('beatName');
         const saveBeatButton = document.getElementById('saveBeat');
-        const beatSelect = document.getElementById('beatSelect');
         const loadBeatButton = document.getElementById('loadBeat');
+        const beatNameInput = document.getElementById('beatName');
+        const beatSelect = document.getElementById('beatSelect');
         const soundboard = document.getElementById('soundboard');
-        const masterVolumeControl = document.getElementById('masterVolume');
-        const masterVolumeValue = document.getElementById('masterVolumeValue');
         const mixingPanel = document.getElementById('mixingPanel');
+        const masterVolumeSlider = document.getElementById('masterVolume');
+        const masterVolumeValue = document.getElementById('masterVolumeValue');
 
-        const rows = 4;
-        const cols = 8;
         let isPlaying = false;
         let currentBeat = 0;
         let tempo = 120;
         let intervalId;
 
-        const sounds = [
-            { name: 'Kick', url: 'https://example.com/kick.wav' },
-            { name: 'Snare', url: 'https://example.com/snare.wav' },
-            { name: 'Hi-hat', url: 'https://example.com/hihat.wav' },
-            { name: 'Clap', url: 'https://example.com/clap.wav' }
+        const tracks = [
+            { name: 'Kick', sound: 'https://sampleswap.org/samples-ghost/DRUMS%20(SINGLE%20HITS)/Kicks/135[kb]analog-style-kick.wav.mp3' },
+            { name: 'Snare', sound: 'https://sampleswap.org/samples-ghost/DRUMS%20(SINGLE%20HITS)/Snares/96[kb]big-snare.wav.mp3' },
+            { name: 'Hi-Hat', sound: 'https://sampleswap.org/samples-ghost/DRUMS%20(SINGLE%20HITS)/Hats/54[kb]acoustic-hihat.wav.mp3' },
+            { name: 'Tom', sound: 'https://sampleswap.org/samples-ghost/DRUMS%20(SINGLE%20HITS)/Toms/88[kb]acoustic-tom.wav.mp3' },
         ];
 
-        const buffers = {};
-
-        let masterGainNode = audioContext.createGain();
-        masterGainNode.connect(audioContext.destination);
-
-        const trackGainNodes = {};
-
-        // Create grid
-        for (let i = 0; i < rows; i++) {
-            for (let j = 0; j < cols; j++) {
+        tracks.forEach((track, index) => {
+            for (let i = 0; i < 8; i++) {
                 const cell = document.createElement('div');
                 cell.classList.add('cell');
-                cell.dataset.row = i;
-                cell.dataset.col = j;
+                cell.dataset.track = index;
+                cell.dataset.beat = i;
                 cell.addEventListener('click', toggleCell);
                 grid.appendChild(cell);
             }
-        }
-
-        // Load sounds
-        sounds.forEach(sound => {
-            fetch(sound.url)
-                .then(response => response.arrayBuffer())
-                .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
-                .then(audioBuffer => {
-                    buffers[sound.name] = audioBuffer;
-                })
-                .catch(error => console.error('Error loading sound:', error));
 
             const button = document.createElement('button');
-            button.textContent = sound.name;
-            button.addEventListener('click', () => playSound(sound.name));
+            button.textContent = track.name;
+            button.addEventListener('click', () => playSound(track.sound));
             soundboard.appendChild(button);
 
             const trackControls = document.createElement('div');
             trackControls.classList.add('track-controls');
-            
-            const trackName = document.createElement('h3');
-            trackName.textContent = sound.name;
-            
-            const volumeControl = document.createElement('input');
-            volumeControl.type = 'range';
-            volumeControl.min = '0';
-            volumeControl.max = '1';
-            volumeControl.step = '0.01';
-            volumeControl.value = '1';
-            
-            const volumeValue = document.createElement('span');
-            volumeValue.textContent = '100%';
-            
-            const panControl = document.createElement('input');
-            panControl.type = 'range';
-            panControl.min = '-1';
-            panControl.max = '1';
-            panControl.step = '0.1';
-            panControl.value = '0';
-            
-            const panValue = document.createElement('span');
-            panValue.textContent = 'C';
-
-            trackControls.appendChild(trackName);
-            trackControls.appendChild(volumeControl);
-            trackControls.appendChild(volumeValue);
-            trackControls.appendChild(panControl);
-            trackControls.appendChild(panValue);
-            
+            trackControls.innerHTML = `
+                <h3>${track.name}</h3>
+                <input type="range" id="volume${index}" min="0" max="1" step="0.01" value="1">
+                <span id="volumeValue${index}">100%</span>
+            `;
             mixingPanel.appendChild(trackControls);
 
-            const gainNode = audioContext.createGain();
-            const panNode = audioContext.createStereoPanner();
-            gainNode.connect(panNode);
-            panNode.connect(masterGainNode);
-            trackGainNodes[sound.name] = { gain: gainNode, pan: panNode };
-
-            volumeControl.addEventListener('input', (e) => {
-                gainNode.gain.setValueAtTime(e.target.value, audioContext.currentTime);
-                volumeValue.textContent = `${Math.round(e.target.value * 100)}%`;
+            const volumeSlider = trackControls.querySelector(`#volume${index}`);
+            const volumeValue = trackControls.querySelector(`#volumeValue${index}`);
+            volumeSlider.addEventListener('input', () => {
+                const value = volumeSlider.value;
+                volumeValue.textContent = `${Math.round(value * 100)}%`;
             });
-
-            panControl.addEventListener('input', (e) => {
-                panNode.pan.setValueAtTime(e.target.value, audioContext.currentTime);
-                panValue.textContent = e.target.value == 0 ? 'C' : (e.target.value < 0 ? 'L' : 'R');
-            });
-        });
-
-        masterVolumeControl.addEventListener('input', (e) => {
-            masterGainNode.gain.setValueAtTime(e.target.value, audioContext.currentTime);
-            masterVolumeValue.textContent = `${Math.round(e.target.value * 100)}%`;
         });
 
         function toggleCell(event) {
             event.target.classList.toggle('active');
         }
 
-        function playSound(soundName) {
+        function playSound(url, time = 0) {
             const source = audioContext.createBufferSource();
-            source.buffer = buffers[soundName];
-            source.connect(trackGainNodes[soundName].gain);
-            source.start();
+            fetch(url)
+                .then(response => response.arrayBuffer())
+                .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+                .then(audioBuffer => {
+                    source.buffer = audioBuffer;
+                    source.connect(masterGainNode);
+                    source.start(time);
+                });
         }
 
-        function playSounds(beat) {
-            const activeCells = grid.querySelectorAll(`.cell[data-col="${beat}"].active`);
+        function playSounds() {
+            const activeCells = document.querySelectorAll(`.cell[data-beat="${currentBeat}"].active`);
+            const currentTime = audioContext.currentTime;
             activeCells.forEach(cell => {
-                const row = cell.dataset.row;
-                playSound(sounds[row].name);
+                const trackIndex = cell.dataset.track;
+                const track = tracks[trackIndex];
+                const volumeSlider = document.getElementById(`volume${trackIndex}`);
+                const volume = volumeSlider.value;
+                const source = audioContext.createBufferSource();
+                const gainNode = audioContext.createGain();
+                gainNode.gain.value = volume;
+                fetch(track.sound)
+                    .then(response => response.arrayBuffer())
+                    .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+                    .then(audioBuffer => {
+                        source.buffer = audioBuffer;
+                        source.connect(gainNode);
+                        gainNode.connect(masterGainNode);
+                        source.start(currentTime);
+                    });
             });
+            currentBeat = (currentBeat + 1) % 8;
         }
 
         function startPlayback() {
-            if (isPlaying) return;
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
             isPlaying = true;
             playPauseButton.textContent = 'Pause';
-            currentBeat = 0;
-            playTick();
-        }
-
-        function pausePlayback() {
-            isPlaying = false;
-            playPauseButton.textContent = 'Play';
-            clearInterval(intervalId);
+            intervalId = setInterval(playSounds, (60 / tempo) * 1000);
         }
 
         function stopPlayback() {
-            pausePlayback();
+            isPlaying = false;
+            playPauseButton.textContent = 'Play';
+            clearInterval(intervalId);
             currentBeat = 0;
-            const activeCells = grid.querySelectorAll('.cell.active');
-            activeCells.forEach(cell => cell.style.backgroundColor = '');
-        }
-
-        function playTick() {
-            playSounds(currentBeat);
-            const currentCells = grid.querySelectorAll(`.cell[data-col="${currentBeat}"]`);
-            currentCells.forEach(cell => cell.style.backgroundColor = '#4a4aff');
-            
-            const previousBeat = (currentBeat - 1 + cols) % cols;
-            const previousCells = grid.querySelectorAll(`.cell[data-col="${previousBeat}"]`);
-            previousCells.forEach(cell => cell.style.backgroundColor = '');
-
-            currentBeat = (currentBeat + 1) % cols;
-            intervalId = setTimeout(playTick, (60 / tempo) * 1000);
         }
 
         playPauseButton.addEventListener('click', () => {
             if (isPlaying) {
-                pausePlayback();
+                stopPlayback();
             } else {
                 startPlayback();
             }
@@ -365,84 +310,56 @@
         stopButton.addEventListener('click', stopPlayback);
 
         clearButton.addEventListener('click', () => {
-            const activeCells = grid.querySelectorAll('.cell.active');
-            activeCells.forEach(cell => cell.classList.remove('active'));
+            document.querySelectorAll('.cell').forEach(cell => cell.classList.remove('active'));
         });
 
-        tempoControl.addEventListener('input', (event) => {
-            tempo = parseInt(event.target.value);
+        tempoSlider.addEventListener('input', () => {
+            tempo = tempoSlider.value;
             bpmDisplay.textContent = `${tempo} BPM`;
             if (isPlaying) {
-                pausePlayback();
+                stopPlayback();
                 startPlayback();
             }
         });
 
-        function saveBeat() {
-            const beatName = beatNameInput.value.trim();
-            if (!beatName) {
-                alert('Please enter a name for your beat.');
-                return;
+        saveBeatButton.addEventListener('click', () => {
+            const beatName = beatNameInput.value;
+            if (beatName) {
+                const beatPattern = Array.from(document.querySelectorAll('.cell')).map(cell => cell.classList.contains('active'));
+                localStorage.setItem(beatName, JSON.stringify(beatPattern));
+                updateBeatList();
             }
+        });
 
-            const beatPattern = [];
-            const cells = grid.querySelectorAll('.cell');
-            cells.forEach(cell => {
-                beatPattern.push(cell.classList.contains('active') ? 1 : 0);
-            });
-
-            const beat = { name: beatName, pattern: beatPattern, tempo: tempo };
-            let savedBeats = JSON.parse(localStorage.getItem('savedBeats')) || [];
-            savedBeats.push(beat);
-            localStorage.setItem('savedBeats', JSON.stringify(savedBeats));
-
-            updateBeatList();
-            beatNameInput.value = '';
-        }
-
-        function loadBeat() {
-            const selectedBeat = beatSelect.value;
-            if (!selectedBeat) {
-                alert('Please select a beat to load.');
-                return;
-            }
-
-            const savedBeats = JSON.parse(localStorage.getItem('savedBeats')) || [];
-            const beat = savedBeats.find(b => b.name === selectedBeat);
-
-            if (beat) {
-                const cells = grid.querySelectorAll('.cell');
-                cells.forEach((cell, index) => {
-                    if (beat.pattern[index] === 1) {
-                        cell.classList.add('active');
-                    } else {
-                        cell.classList.remove('active');
-                    }
+        loadBeatButton.addEventListener('click', () => {
+            const beatName = beatSelect.value;
+            if (beatName) {
+                const beatPattern = JSON.parse(localStorage.getItem(beatName));
+                document.querySelectorAll('.cell').forEach((cell, index) => {
+                    cell.classList.toggle('active', beatPattern[index]);
                 });
-
-                tempo = beat.tempo;
-                tempoControl.value = tempo;
-                bpmDisplay.textContent = `${tempo} BPM`;
             }
-        }
+        });
 
         function updateBeatList() {
-            const savedBeats = JSON.parse(localStorage.getItem('savedBeats')) || [];
             beatSelect.innerHTML = '<option value="">Select a beat</option>';
-            savedBeats.forEach(beat => {
+            for (let i = 0; i < localStorage.length; i++) {
+                const beatName = localStorage.key(i);
                 const option = document.createElement('option');
-                option.value = beat.name;
-                option.textContent = beat.name;
+                option.value = beatName;
+                option.textContent = beatName;
                 beatSelect.appendChild(option);
-            });
+            }
         }
-
-        saveBeatButton.addEventListener('click', saveBeat);
-        loadBeatButton.addEventListener('click', loadBeat);
 
         updateBeatList();
 
-        // Create stars
+        masterVolumeSlider.addEventListener('input', () => {
+            const value = masterVolumeSlider.value;
+            masterGainNode.gain.setValueAtTime(value, audioContext.currentTime);
+            masterVolumeValue.textContent = `${Math.round(value * 100)}%`;
+        });
+
         function createStars() {
             const starsContainer = document.querySelector('.stars');
             for (let i = 0; i < 100; i++) {
@@ -450,12 +367,12 @@
                 star.style.position = 'absolute';
                 star.style.left = `${Math.random() * 100}%`;
                 star.style.top = `${Math.random() * 100}%`;
-                star.style.width = `${Math.random() * 3}px`;
-                star.style.height = star.style.width;
+                star.style.width = '2px';
+                star.style.height = '2px';
                 star.style.backgroundColor = 'white';
                 star.style.borderRadius = '50%';
                 star.style.opacity = Math.random();
-                star.style.animation = `twinkle ${Math.random() * 5 + 5}s linear infinite`;
+                star.style.animation = `twinkle ${Math.random() * 5 + 5}s infinite`;
                 starsContainer.appendChild(star);
             }
         }
