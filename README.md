@@ -165,6 +165,25 @@
         .career-item ul {
             text-align: left;
         }
+        .intro-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .intro-item {
+            background-color: var(--fl-light-gray);
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .intro-item h3 {
+            color: var(--fl-orange);
+            margin-bottom: 10px;
+        }
+        .intro-item p {
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
@@ -187,8 +206,22 @@
 
     <main class="container">
         <section id="intro">
-            <h2>Welcome to the World of Music Engineering</h2>
-            <p>Explore the fascinating intersection of technology and creativity that shapes the soundtrack of our lives.</p>
+            <h2>Welcome to Engineering Thru Beats</h2>
+            <p>Step into the electrifying world where technology meets creativity, and engineering shapes the soundtrack of our lives. Our repository is your gateway to the fascinating realm of music production and engineering.</p>
+            <div class="intro-grid">
+                <div class="intro-item">
+                    <h3>Explore Engineering</h3>
+                    <p>Discover how engineering principles transform raw sounds into chart-topping hits. From signal processing to acoustics, we'll ignite your passion for the technical side of music.</p>
+                </div>
+                <div class="intro-item">
+                    <h3>Interactive Beat Maker</h3>
+                    <p>Get hands-on experience with our interactive beat maker. Create, mix, and experiment with sounds to bring your musical ideas to life.</p>
+                </div>
+                <div class="intro-item">
+                    <h3>Meet the Producers</h3>
+                    <p>Learn from industry giants like Dr. Dre, Benny Blanco, and Metro Boomin. Dive into their stories, techniques, and the engineering behind their signature sounds.</p>
+                </div>
+            </div>
         </section>
 
         <section id="aspects">
