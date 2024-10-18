@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Engineering Thru Beats: Exploring Music Engineering</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Permanent+Marker&family=Press+Start+2P&family=Russo+One&family=Special+Elite&display=swap" rel="stylesheet">
     <style>
         :root {
             --fl-orange: #ff8c00;
@@ -29,7 +30,6 @@
             padding: 20px 0;
             text-align: center;
         }
-        /* Placeholder for animated title */
         .animated-title {
             font-size: 48px;
             color: var(--fl-orange);
@@ -70,7 +70,6 @@
             padding: 20px;
             border-radius: 5px;
         }
-        /* Placeholder for interactive beat pad */
         .beat-pad {
             background-color: var(--fl-dark-gray);
             height: 300px;
@@ -88,6 +87,32 @@
             background-color: var(--fl-light-gray);
             padding: 20px;
             border-radius: 5px;
+        }
+        .career-item ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .career-item li {
+            margin-bottom: 5px;
+        }
+        .dr-dre {
+            font-family: 'Permanent Marker', cursive;
+        }
+        .benny-blanco {
+            font-family: 'Press Start 2P', cursive;
+        }
+        .metro-boomin {
+            font-family: 'Russo One', sans-serif;
+        }
+        .cash-cobain {
+            font-family: 'Bangers', cursive;
+        }
+        .timbaland {
+            font-family: 'Special Elite', cursive;
+        }
+        .career-item h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
         }
         .testimonial {
             background-color: var(--fl-dark-gray);
@@ -121,7 +146,6 @@
 <body>
     <header>
         <div class="animated-title">
-            <!-- Placeholder for animated graffiti-style title -->
             Engineering Thru Beats
         </div>
     </header>
@@ -170,7 +194,6 @@
             <p>Ready to make some music? Try our interactive beat maker!</p>
             <a href="beat_maker.html" class="cta-button">Launch Beat Maker</a>
             <div class="beat-pad">
-                <!-- Placeholder for interactive beat pad preview -->
                 <p>Beat Pad Preview</p>
             </div>
         </section>
@@ -179,19 +202,59 @@
             <h2>Careers in Music Production</h2>
             <div class="careers-grid">
                 <div class="career-item">
-                    <h3>Studio Engineer</h3>
-                    <p>Salary Range: $35,000 - $150,000+</p>
-                    <p>Education: Bachelor's in Audio Engineering can increase earning potential by 20-30%</p>
+                    <h3 class="dr-dre">Dr. Dre</h3>
+                    <ul class="dr-dre">
+                        <li>Real Name: Andre Romelle Young</li>
+                        <li>Started as: DJ in the 1980s</li>
+                        <li>Known for: Pioneering West Coast G-funk</li>
+                        <li>Notable Acts: N.W.A, Eminem, Snoop Dogg</li>
+                        <li>Estimated Net Worth: $820 million</li>
+                    </ul>
                 </div>
                 <div class="career-item">
-                    <h3>Music Producer</h3>
-                    <p>Salary Range: $25,000 - $1,000,000+</p>
+                    <h3 class="benny-blanco">Benny Blanco</h3>
+                    <ul class="benny-blanco">
+                        <li>Real Name: Benjamin Joseph Levin</li>
+                        <li>Started: Producing in his teens</li>
+                        <li>Known for: Pop and hip-hop production</li>
+                        <li>Notable Acts: Ed Sheeran, Justin Bieber, Maroon 5</li>
+                        <li>Estimated Net Worth: $50 million</li>
+                    </ul>
+                </div>
+                <div class="career-item">
+                    <h3 class="metro-boomin">Metro Boomin</h3>
+                    <ul class="metro-boomin">
+                        <li>Real Name: Leland Tyler Wayne</li>
+                        <li>Started: Producing at age 13</li>
+                        <li>Known for: Trap music production</li>
+                        <li>Notable Acts: Future, 21 Savage, The Weeknd</li>
+                        <li>Estimated Net Worth: $16 million</li>
+                    </ul>
+                </div>
+                <div class="career-item">
+                    <h3 class="cash-cobain">Cash Cobain</h3>
+                    <ul class="cash-cobain">
+                        <li>Known as: "The Sample God"</li>
+                        <li>Started: In the New York drill scene</li>
+                        <li>Known for: Innovative sampling in drill music</li>
+                        <li>Notable Acts: Various NY drill artists</li>
+                        <li>Estimated Net Worth: Not publicly available</li>
+                    </ul>
+                </div>
+                <div class="career-item">
+                    <h3 class="timbaland">Timbaland</h3>
+                    <ul class="timbaland">
+                        <li>Real Name: Timothy Zachary Mosley</li>
+                        <li>Started: As part of production duo S.B.I.</li>
+                        <li>Known for: Innovative rhythm and sound design</li>
+                        <li>Notable Acts: Missy Elliott, Justin Timberlake, Aaliyah</li>
+                        <li>Estimated Net Worth: $85 million</li>
+                    </ul>
+                </div>
+                <div class="career-item">
+                    <h3>General Career Info</h3>
+                    <p>Music Producer Salary Range: $25,000 - $1,000,000+</p>
                     <p>Education: Degree in Music Production or Business can open doors to higher-paying opportunities</p>
-                </div>
-                <div class="career-item">
-                    <h3>Sound Designer for Film/TV</h3>
-                    <p>Salary Range: $40,000 - $120,000+</p>
-                    <p>Education: Specialized courses in post-production can lead to premium projects</p>
                 </div>
             </div>
         </section>
@@ -213,7 +276,6 @@
         <p>&copy; 2024 Engineering Thru Beats. All rights reserved.</p>
     </footer>
 
-    <!-- Placeholder for JavaScript -->
     <script>
         // JavaScript for animations and interactivity would go here
     </script>
