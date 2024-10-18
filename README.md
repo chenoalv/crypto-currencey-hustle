@@ -149,6 +149,22 @@
             background-color: var(--fl-light-gray);
             color: var(--fl-orange);
         }
+        .producer-image {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+        .career-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .career-item ul {
+            text-align: left;
+        }
     </style>
 </head>
 <body>
@@ -210,6 +226,7 @@
             <h2>Careers in Music Production</h2>
             <div class="careers-grid">
                 <div class="career-item">
+                    <img src="images/drdre.jpg" alt="Dr. Dre" class="producer-image">
                     <h3 class="dr-dre">Dr. Dre</h3>
                     <ul class="dr-dre">
                         <li>Real Name: Andre Romelle Young</li>
@@ -220,6 +237,7 @@
                     </ul>
                 </div>
                 <div class="career-item">
+                    <img src="images/benny.jpg" alt="Benny Blanco" class="producer-image">
                     <h3 class="benny-blanco">Benny Blanco</h3>
                     <ul class="benny-blanco">
                         <li>Real Name: Benjamin Joseph Levin</li>
@@ -230,6 +248,7 @@
                     </ul>
                 </div>
                 <div class="career-item">
+                    <img src="images/metro.jpg" alt="Metro Boomin" class="producer-image">
                     <h3 class="metro-boomin">Metro Boomin</h3>
                     <ul class="metro-boomin">
                         <li>Real Name: Leland Tyler Wayne</li>
@@ -240,6 +259,7 @@
                     </ul>
                 </div>
                 <div class="career-item">
+                    <img src="images/cash.jpg" alt="Cash Cobain" class="producer-image">
                     <h3 class="cash-cobain">Cash Cobain</h3>
                     <ul class="cash-cobain">
                         <li>Known as: "The Sample God"</li>
@@ -250,6 +270,7 @@
                     </ul>
                 </div>
                 <div class="career-item">
+                    <img src="images/timb.jpg" alt="Timbaland" class="producer-image">
                     <h3 class="timbaland">Timbaland</h3>
                     <ul class="timbaland">
                         <li>Real Name: Timothy Zachary Mosley</li>
