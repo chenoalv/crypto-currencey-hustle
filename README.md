@@ -120,6 +120,14 @@
             margin-bottom: 20px;
             border-left: 5px solid var(--fl-orange);
         }
+        .testimonial p {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        .testimonial cite {
+            font-style: italic;
+            font-size: 0.9em;
+        }
         footer {
             background-color: var(--fl-dark-gray);
             text-align: center;
@@ -261,6 +269,26 @@
 
         <section id="testimonials">
             <h2>What the Pros Say</h2>
+            <div class="testimonial dr-dre">
+                <p>"The most important thing is to be true to yourself and make music that you love."</p>
+                <cite>- Dr. Dre</cite>
+            </div>
+            <div class="testimonial benny-blanco">
+                <p>"Don't be afraid to experiment. Some of the best sounds come from happy accidents."</p>
+                <cite>- Benny Blanco</cite>
+            </div>
+            <div class="testimonial metro-boomin">
+                <p>"If you want to be a producer, you gotta make at least five beats a day for three summers."</p>
+                <cite>- Metro Boomin</cite>
+            </div>
+            <div class="testimonial cash-cobain">
+                <p>"Sampling is an art form. It's about finding that perfect sound and flipping it into something new."</p>
+                <cite>- Cash Cobain</cite>
+            </div>
+            <div class="testimonial timbaland">
+                <p>"To make it in this industry, you need to have your own sound. Be innovative and push boundaries."</p>
+                <cite>- Timbaland</cite>
+            </div>
             <div class="testimonial">
                 <p>"Engineering isn't just about technicality; it's about translating emotion into sound."</p>
                 <cite>- Alex Turner, Platinum Record Producer</cite>
