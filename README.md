@@ -19,19 +19,6 @@
             margin: 0;
             padding: 0;
             line-height: 1.6;
-            position: relative;
-        }
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                linear-gradient(rgba(30, 30, 30, 0.9), rgba(30, 30, 30, 0.9)),
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23424242' fill-opacity='0.4'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            z-index: -1;
         }
         .container {
             max-width: 1200px;
@@ -42,28 +29,10 @@
             background-color: var(--fl-dark-gray);
             padding: 20px 0;
             text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, var(--fl-orange) 25%, transparent 25%, transparent 75%, var(--fl-orange) 75%, var(--fl-orange)), 
-                        linear-gradient(45deg, var(--fl-orange) 25%, transparent 25%, transparent 75%, var(--fl-orange) 75%, var(--fl-orange));
-            background-size: 60px 60px;
-            background-position: 0 0, 30px 30px;
-            opacity: 0.1;
-            z-index: -1;
         }
         .animated-title {
             font-size: 48px;
             color: var(--fl-orange);
-            position: relative;
-            z-index: 1;
         }
         nav {
             background-color: var(--fl-light-gray);
@@ -87,20 +56,6 @@
         }
         section {
             padding: 50px 0;
-            position: relative;
-        }
-        section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle, transparent 20%, var(--fl-black) 20%, var(--fl-black) 80%, transparent 80%, transparent), 
-                        radial-gradient(circle, transparent 20%, var(--fl-black) 20%, var(--fl-black) 80%, transparent 80%, transparent) 50px 50px;
-            background-size: 100px 100px;
-            opacity: 0.05;
-            z-index: -1;
         }
         h2 {
             color: var(--fl-orange);
@@ -114,19 +69,6 @@
             background-color: var(--fl-light-gray);
             padding: 20px;
             border-radius: 5px;
-            position: relative;
-            overflow: hidden;
-        }
-        .aspect-item::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, transparent 50%, transparent 100%);
-            transform: rotate(45deg);
-            z-index: 1;
         }
         .beat-pad {
             background-color: var(--fl-dark-gray);
@@ -135,27 +77,6 @@
             justify-content: center;
             align-items: center;
             margin: 20px 0;
-            position: relative;
-            overflow: hidden;
-        }
-        .beat-pad::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                linear-gradient(45deg, var(--fl-orange) 25%, transparent 25%, transparent 75%, var(--fl-orange) 75%, var(--fl-orange)), 
-                linear-gradient(45deg, var(--fl-orange) 25%, transparent 25%, transparent 75%, var(--fl-orange) 75%, var(--fl-orange));
-            background-size: 60px 60px;
-            background-position: 0 0, 30px 30px;
-            opacity: 0.1;
-            z-index: 0;
-        }
-        .beat-pad p {
-            position: relative;
-            z-index: 1;
         }
         .careers-grid {
             display: grid;
@@ -166,25 +87,10 @@
             background-color: var(--fl-light-gray);
             padding: 20px;
             border-radius: 5px;
-            position: relative;
-            overflow: hidden;
-        }
-        .career-item::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, transparent 50%, transparent 100%);
-            transform: rotate(45deg);
-            z-index: 1;
         }
         .career-item ul {
             list-style-type: none;
             padding: 0;
-            position: relative;
-            z-index: 2;
         }
         .career-item li {
             margin-bottom: 5px;
@@ -213,59 +119,20 @@
             padding: 20px;
             margin-bottom: 20px;
             border-left: 5px solid var(--fl-orange);
-            position: relative;
-            overflow: hidden;
-        }
-        .testimonial::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, var(--fl-orange) 25%, transparent 25%, transparent 75%, var(--fl-orange) 75%, var(--fl-orange));
-            background-size: 10px 10px;
-            opacity: 0.1;
-            z-index: 0;
         }
         .testimonial p {
             font-size: 1.1em;
             margin-bottom: 10px;
-            position: relative;
-            z-index: 1;
         }
         .testimonial cite {
             font-style: italic;
             font-size: 0.9em;
-            position: relative;
-            z-index: 1;
         }
         footer {
             background-color: var(--fl-dark-gray);
             text-align: center;
             padding: 20px 0;
             margin-top: 50px;
-            position: relative;
-            overflow: hidden;
-        }
-        footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                linear-gradient(45deg, var(--fl-orange) 25%, transparent 25%, transparent 75%, var(--fl-orange) 75%, var(--fl-orange)), 
-                linear-gradient(45deg, var(--fl-orange) 25%, transparent 25%, transparent 75%, var(--fl-orange) 75%, var(--fl-orange));
-            background-size: 20px 20px;
-            background-position: 0 0, 10px 10px;
-            opacity: 0.1;
-            z-index: 0;
-        }
-        footer p {
-            position: relative;
-            z-index: 1;
         }
         .cta-button {
             display: inline-block;
@@ -277,31 +144,168 @@
             border-radius: 5px;
             transition: background-color 0.3s ease;
             margin-bottom: 20px;
-            position: relative;
-            overflow: hidden;
         }
         .cta-button:hover {
             background-color: var(--fl-light-gray);
             color: var(--fl-orange);
         }
-        .cta-button::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 50%, transparent 50%, transparent 100%);
-            transform: rotate(45deg);
-            transition: 0.3s;
-        }
-        .cta-button:hover::after {
-            top: -100%;
-            left: -100%;
-        }
     </style>
 </head>
 <body>
-    <!-- The rest of the HTML remains unchanged -->
+    <header>
+        <div class="animated-title">
+            Engineering Thru Beats
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#intro">Intro</a></li>
+            <li><a href="#aspects">Key Aspects</a></li>
+            <li><a href="#beatpad">Beat Pad</a></li>
+            <li><a href="#careers">Careers</a></li>
+            <li><a href="#testimonials">Testimonials</a></li>
+            <li><a href="why-beats.html">Why Beats?</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <section id="intro">
+            <h2>Welcome to the World of Music Engineering</h2>
+            <p>Explore the fascinating intersection of technology and creativity that shapes the soundtrack of our lives.</p>
+        </section>
+
+        <section id="aspects">
+            <h2>Key Aspects of Music Engineering</h2>
+            <div class="aspect-grid">
+                <div class="aspect-item">
+                    <h3>Recording</h3>
+                    <p>Capture pristine audio using state-of-the-art equipment and techniques.</p>
+                </div>
+                <div class="aspect-item">
+                    <h3>Mixing</h3>
+                    <p>Blend multiple tracks into a cohesive and balanced sonic masterpiece.</p>
+                </div>
+                <div class="aspect-item">
+                    <h3>Mastering</h3>
+                    <p>Polish and prepare your tracks for distribution across various platforms.</p>
+                </div>
+                <div class="aspect-item">
+                    <h3>Sound Design</h3>
+                    <p>Create unique audio elements that bring productions to life.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="beatpad">
+            <h2>Create Your Own Beats</h2>
+            <p>Ready to make some music? Try our interactive beat maker!</p>
+            <a href="beat_maker.html" class="cta-button">Launch Beat Maker</a>
+            <div class="beat-pad">
+                <p>Beat Pad Preview</p>
+            </div>
+        </section>
+
+        <section id="careers">
+            <h2>Careers in Music Production</h2>
+            <div class="careers-grid">
+                <div class="career-item">
+                    <h3 class="dr-dre">Dr. Dre</h3>
+                    <ul class="dr-dre">
+                        <li>Real Name: Andre Romelle Young</li>
+                        <li>Started as: DJ in the 1980s</li>
+                        <li>Known for: Pioneering West Coast G-funk</li>
+                        <li>Notable Acts: N.W.A, Eminem, Snoop Dogg</li>
+                        <li>Estimated Net Worth: $820 million</li>
+                    </ul>
+                </div>
+                <div class="career-item">
+                    <h3 class="benny-blanco">Benny Blanco</h3>
+                    <ul class="benny-blanco">
+                        <li>Real Name: Benjamin Joseph Levin</li>
+                        <li>Started: Producing in his teens</li>
+                        <li>Known for: Pop and hip-hop production</li>
+                        <li>Notable Acts: Ed Sheeran, Justin Bieber, Maroon 5</li>
+                        <li>Estimated Net Worth: $50 million</li>
+                    </ul>
+                </div>
+                <div class="career-item">
+                    <h3 class="metro-boomin">Metro Boomin</h3>
+                    <ul class="metro-boomin">
+                        <li>Real Name: Leland Tyler Wayne</li>
+                        <li>Started: Producing at age 13</li>
+                        <li>Known for: Trap music production</li>
+                        <li>Notable Acts: Future, 21 Savage, The Weeknd</li>
+                        <li>Estimated Net Worth: $16 million</li>
+                    </ul>
+                </div>
+                <div class="career-item">
+                    <h3 class="cash-cobain">Cash Cobain</h3>
+                    <ul class="cash-cobain">
+                        <li>Known as: "The Sample God"</li>
+                        <li>Started: In the New York drill scene</li>
+                        <li>Known for: Innovative sampling in drill music</li>
+                        <li>Notable Acts: Various NY drill artists</li>
+                        <li>Estimated Net Worth: Not publicly available</li>
+                    </ul>
+                </div>
+                <div class="career-item">
+                    <h3 class="timbaland">Timbaland</h3>
+                    <ul class="timbaland">
+                        <li>Real Name: Timothy Zachary Mosley</li>
+                        <li>Started: As part of production duo S.B.I.</li>
+                        <li>Known for: Innovative rhythm and sound design</li>
+                        <li>Notable Acts: Missy Elliott, Justin Timberlake, Aaliyah</li>
+                        <li>Estimated Net Worth: $85 million</li>
+                    </ul>
+                </div>
+                <div class="career-item">
+                    <h3>General Career Info</h3>
+                    <p>Music Producer Salary Range: $25,000 - $1,000,000+</p>
+                    <p>Education: Degree in Music Production or Business can open doors to higher-paying opportunities</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials">
+            <h2>What the Pros Say</h2>
+            <div class="testimonial dr-dre">
+                <p>"The most important thing is to be true to yourself and make music that you love."</p>
+                <cite>- Dr. Dre</cite>
+            </div>
+            <div class="testimonial benny-blanco">
+                <p>"Don't be afraid to experiment. Some of the best sounds come from happy accidents."</p>
+                <cite>- Benny Blanco</cite>
+            </div>
+            <div class="testimonial metro-boomin">
+                <p>"If you want to be a producer, you gotta make at least five beats a day for three summers."</p>
+                <cite>- Metro Boomin</cite>
+            </div>
+            <div class="testimonial cash-cobain">
+                <p>"Sampling is an art form. It's about finding that perfect sound and flipping it into something new."</p>
+                <cite>- Cash Cobain</cite>
+            </div>
+            <div class="testimonial timbaland">
+                <p>"To make it in this industry, you need to have your own sound. Be innovative and push boundaries."</p>
+                <cite>- Timbaland</cite>
+            </div>
+            <div class="testimonial">
+                <p>"Engineering isn't just about technicality; it's about translating emotion into sound."</p>
+                <cite>- Alex Turner, Platinum Record Producer</cite>
+            </div>
+            <div class="testimonial">
+                <p>"My engineering degree gave me the edge in understanding both the art and science of music production."</p>
+                <cite>- Samantha Lee, Grammy-nominated Engineer</cite>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Engineering Thru Beats. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // JavaScript for animations and interactivity would go here
+    </script>
 </body>
 </html>
