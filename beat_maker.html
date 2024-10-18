@@ -13,7 +13,7 @@
             margin: 0;
             padding: 20px;
             min-height: 100vh;
-            overflow-y: auto; /* Allow vertical scrolling */
+            overflow-y: auto;
         }
         .container {
             background-color: rgba(42, 42, 78, 0.8);
@@ -180,9 +180,20 @@
     </div>
 
     <script>
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const masterGainNode = audioContext.createGain();
-        masterGainNode.connect(audioContext.destination);
+        let audioContext;
+        let masterGainNode;
+        const audioBuffers = {};
+
+        function initAudioContext() {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+            masterGainNode = audioContext.createGain();
+            masterGainNode.connect(audioContext.destination);
+        }
+
+        document.addEventListener('DOMContentLoaded', initAudioContext);
 
         const grid = document.getElementById('grid');
         const playPauseButton = document.getElementById('playPause');
@@ -211,6 +222,20 @@
             { name: 'Tom', sound: 'https://sampleswap.org/samples-ghost/DRUMS%20(SINGLE%20HITS)/Toms/88[kb]acoustic-tom.wav.mp3' },
         ];
 
+        function preloadAudioFiles() {
+            tracks.forEach(track => {
+                fetch(track.sound)
+                    .then(response => response.arrayBuffer())
+                    .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+                    .then(audioBuffer => {
+                        audioBuffers[track.name] = audioBuffer;
+                    })
+                    .catch(error => console.error('Error loading audio:', error));
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', preloadAudioFiles);
+
         tracks.forEach((track, index) => {
             for (let i = 0; i < 8; i++) {
                 const cell = document.createElement('div');
@@ -223,7 +248,7 @@
 
             const button = document.createElement('button');
             button.textContent = track.name;
-            button.addEventListener('click', () => playSound(track.sound));
+            button.addEventListener('click', () => playSound(track.name));
             soundboard.appendChild(button);
 
             const trackControls = document.createElement('div');
@@ -247,19 +272,15 @@
             event.target.classList.toggle('active');
         }
 
-        function playSound(url, time = 0) {
+        function playSound(trackName, time = 0) {
             const source = audioContext.createBufferSource();
-            fetch(url)
-                .then(response => response.arrayBuffer())
-                .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
-                .then(audioBuffer => {
-                    source.buffer = audioBuffer;
-                    source.connect(masterGainNode);
-                    source.start(time);
-                });
+            source.buffer = audioBuffers[trackName];
+            source.connect(masterGainNode);
+            source.start(time);
         }
 
         function playSounds() {
+            console.log('Playing sounds for beat:', currentBeat);
             const activeCells = document.querySelectorAll(`.cell[data-beat="${currentBeat}"].active`);
             const currentTime = audioContext.currentTime;
             activeCells.forEach(cell => {
@@ -267,29 +288,26 @@
                 const track = tracks[trackIndex];
                 const volumeSlider = document.getElementById(`volume${trackIndex}`);
                 const volume = volumeSlider.value;
-                const source = audioContext.createBufferSource();
                 const gainNode = audioContext.createGain();
                 gainNode.gain.value = volume;
-                fetch(track.sound)
-                    .then(response => response.arrayBuffer())
-                    .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
-                    .then(audioBuffer => {
-                        source.buffer = audioBuffer;
-                        source.connect(gainNode);
-                        gainNode.connect(masterGainNode);
-                        source.start(currentTime);
-                    });
+                const source = audioContext.createBufferSource();
+                source.buffer = audioBuffers[track.name];
+                source.connect(gainNode);
+                gainNode.connect(masterGainNode);
+                source.start(currentTime);
             });
             currentBeat = (currentBeat + 1) % 8;
         }
 
         function startPlayback() {
-            if (audioContext.state === 'suspended') {
-                audioContext.resume();
+            try {
+                initAudioContext();
+                isPlaying = true;
+                playPauseButton.textContent = 'Pause';
+                intervalId = setInterval(playSounds, (60 / tempo) * 1000);
+            } catch (error) {
+                console.error('Error starting playback:', error);
             }
-            isPlaying = true;
-            playPauseButton.textContent = 'Pause';
-            intervalId = setInterval(playSounds, (60 / tempo) * 1000);
         }
 
         function stopPlayback() {
@@ -300,6 +318,7 @@
         }
 
         playPauseButton.addEventListener('click', () => {
+            console.log('Play/Pause button clicked');
             if (isPlaying) {
                 stopPlayback();
             } else {
