@@ -133,7 +133,7 @@
             <li><a href="#beatpad">Beat Pad</a></li>
             <li><a href="#careers">Careers</a></li>
             <li><a href="#testimonials">Testimonials</a></li>
-            <li><a href="Why-Beats.md">Why Beats?</a></li>
+            <li><a href="why-beats.html">Why Beats?</a></li>
         </ul>
     </nav>
 
